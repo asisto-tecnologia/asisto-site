@@ -788,3 +788,61 @@ a{color:inherit;text-decoration:none}
   .team-dots button{height:8px;width:8px;border-radius:999px;border:0;padding:0;background:rgba(255,255,255,.25);transition:all .3s ease}
   .team-dots button.on{width:28px;background:var(--azure);box-shadow:0 0 10px rgba(0,151,255,.7)}
 }
+
+/* ---- blog (05/10/2026) ---- listagem em /blog/ e artigos em /blog/<post>/ */
+.blog-hero{padding-block:64px 24px;text-align:center}
+.blog-eyebrow{margin:0 0 18px}
+.blog-eyebrow span,.post-tag{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
+.blog-title{font-size:48px;line-height:1.1}
+.blog-title .accent,.post-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+.blog-sub{margin:16px auto 0;max-width:52ch;font-size:17px;color:var(--muted)}
+
+.post-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:48px;text-align:left}
+.post-card{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:22px;background:var(--panel);transition:border-color .3s ease,transform .35s cubic-bezier(.25,1,.5,1)}
+.post-card:hover{border-color:rgba(0,151,255,.45);transform:translateY(-4px)}
+.post-card-img{aspect-ratio:3/2;overflow:hidden;background:#05080c}
+.post-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.post-card:hover .post-card-img img{transform:scale(1.04)}
+.post-card-body{display:flex;flex-direction:column;flex:1;padding:26px 28px 28px}
+.post-card-body h2{margin:16px 0 0;font-size:24px;line-height:1.25}
+.post-card-body p{margin:12px 0 0;font-size:15px;line-height:1.6;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.post-more{display:inline-flex;align-items:center;gap:8px;margin-top:auto;padding-top:22px;font-size:14px;font-weight:800;color:var(--sky)}
+.post-more svg{width:16px;height:16px;transition:transform .25s ease}
+.post-card:hover .post-more svg{transform:translateX(4px)}
+
+.post{max-width:780px;padding-block:48px 32px}
+.post-back{display:flex;width:fit-content;align-items:center;gap:8px;margin-bottom:28px;font-size:14px;font-weight:700;color:var(--muted);transition:color .2s}
+.post-back:hover{color:var(--sky)}
+.post-back svg{width:16px;height:16px}
+.post-title{margin-top:18px;font-size:40px;line-height:1.15}
+.post-by{margin:14px 0 0;font-size:14px;color:var(--muted)}
+.post-cover{margin:32px 0 0;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:#05080c}
+.post-cover img{width:100%;height:auto}
+.post-body{margin-top:36px}
+.post-body p{margin:0 0 22px;font-size:18px;line-height:1.75;color:var(--ink)}
+.post-body h2{margin:40px 0 14px;font-size:26px;line-height:1.25}
+.post-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:44px;padding:30px 32px;border:1px solid var(--line);border-radius:22px;background:var(--panel)}
+.post-cta h2{font-size:22px;line-height:1.3}
+.post-cta p{margin:8px 0 0;font-size:15px;color:var(--muted)}
+.post-next-l{margin:48px 0 14px;font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.post-next{display:flex;align-items:center;gap:18px;padding:12px;border:1px solid var(--line);border-radius:18px;background:var(--panel);transition:border-color .3s ease}
+.post-next:hover{border-color:rgba(0,151,255,.45)}
+.post-next img{flex:none;width:120px;aspect-ratio:3/2;object-fit:cover;border-radius:12px}
+.post-next span{font-size:17px;font-weight:800;line-height:1.3;color:var(--white)}
+
+@media (max-width:700px){
+  .blog-hero{padding-block:36px 8px}
+  .blog-title{font-size:36px}
+  .blog-sub{font-size:16px}
+  .post-grid{grid-template-columns:minmax(0,1fr);gap:18px;margin-top:32px}
+  .post-card-body{padding:20px 20px 22px}
+  .post-card-body h2{font-size:21px}
+  .post{padding-block:28px 16px}
+  .post-title{font-size:28px}
+  .post-body p{font-size:17px;line-height:1.7}
+  .post-body h2{font-size:22px;margin-top:32px}
+  .post-cta{flex-direction:column;align-items:flex-start;padding:24px 20px}
+  .post-cta .btn{width:100%;justify-content:center}
+  .post-next img{width:88px}
+  .post-next span{font-size:15px}
+}
