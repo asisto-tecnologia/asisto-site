@@ -149,23 +149,25 @@
     cards.forEach(function (card, idx) {
       var offset = idx - currentIndex; // linear (sem dar a volta): a ordem FAB · ERP · FLOW · VOICE · LMS nunca muda
       var transform, opacity, zIndex, filter, isCenter = false;
+      var narrow = window.innerWidth <= 700; // celular: vizinhos mais colados e só 1 de cada lado
+      var d1 = narrow ? 185 : 265, d2 = narrow ? 300 : 470;
 
       if (offset === 0) {
         isCenter = true;
         transform = 'translateX(0px) scale(1) rotateY(0deg)';
         opacity = 1; zIndex = 30; filter = 'brightness(1)';
       } else if (offset === 1) {
-        transform = 'translateX(265px) scale(.84) rotateY(-24deg)';
+        transform = 'translateX(' + d1 + 'px) scale(.84) rotateY(-24deg)';
         opacity = .65; zIndex = 20; filter = 'brightness(.75)';
       } else if (offset === 2) {
-        transform = 'translateX(470px) scale(.68) rotateY(-38deg)';
-        opacity = .38; zIndex = 10; filter = 'brightness(.55) blur(1px)';
+        transform = 'translateX(' + d2 + 'px) scale(.68) rotateY(-38deg)';
+        opacity = narrow ? 0 : .38; zIndex = 10; filter = 'brightness(.55) blur(1px)';
       } else if (offset === -1) {
-        transform = 'translateX(-265px) scale(.84) rotateY(24deg)';
+        transform = 'translateX(-' + d1 + 'px) scale(.84) rotateY(24deg)';
         opacity = .65; zIndex = 20; filter = 'brightness(.75)';
       } else if (offset === -2) {
-        transform = 'translateX(-470px) scale(.68) rotateY(38deg)';
-        opacity = .38; zIndex = 10; filter = 'brightness(.55) blur(1px)';
+        transform = 'translateX(-' + d2 + 'px) scale(.68) rotateY(38deg)';
+        opacity = narrow ? 0 : .38; zIndex = 10; filter = 'brightness(.55) blur(1px)';
       } else {
         transform = 'translateX(0px) scale(.4) rotateY(0deg)';
         opacity = 0; zIndex = 0; filter = 'brightness(.4) blur(2px)';
@@ -225,6 +227,7 @@
     if (Math.abs(diff) > 45) { diff < 0 ? next() : prev(); }
   });
 
+  window.addEventListener('resize', render);
   render();
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduceMotion) startAutoplay();
