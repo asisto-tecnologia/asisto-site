@@ -846,3 +846,5 @@ a{color:inherit;text-decoration:none}
   .post-next img{width:88px}
   .post-next span{font-size:15px}
 }
+.post-date{display:block;margin-top:14px;font-size:13px;color:var(--muted)}
+.post-card-body .post-date+h2{margin-top:6px}
