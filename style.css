@@ -848,3 +848,7 @@ a{color:inherit;text-decoration:none}
 }
 .post-date{display:block;margin-top:14px;font-size:13px;color:var(--muted)}
 .post-card-body .post-date+h2{margin-top:6px}
+.blog-collapsed .post-card.is-extra{display:none}
+.blog-more{display:block;margin:36px auto 0;padding:12px 28px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--white);font:inherit;font-weight:800;font-size:15px;cursor:pointer;transition:background .2s ease,border-color .2s ease}
+.blog-more:hover{background:rgba(0,151,255,.10);border-color:rgba(0,151,255,.4)}
+.blog-more[hidden]{display:none}
