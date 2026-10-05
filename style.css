@@ -1,0 +1,650 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300..900;1,6..12,300..900&display=swap');
+
+:root{
+  --carbon:#0b1118;
+  --panel:#0d1620;
+  --azure:#0097ff;
+  --sky:#6fcbff;
+  --deep:#004d74;
+  --white:#ffffff;
+  --ink:#eaf4fb;
+  --muted:#9db1c4;
+  --line:rgba(255,255,255,.12);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--carbon);
+  color:var(--ink);
+  font-family:'Nunito Sans',sans-serif;
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3{margin:0;font-weight:900;letter-spacing:-.01em;color:var(--white);text-wrap:balance}
+h2{font-size:36px;line-height:1.15}
+a{color:inherit;text-decoration:none}
+
+/* ---- top nav ---- */
+/* 23/09: usuário corrigiu — não é um retângulo novo por fora, é o MESMO retângulo do menu que já
+   existia esticando pra abraçar logo + nav + botão juntos (uma pílula só, não uma dentro da outra) */
+.top{position:sticky;top:16px;z-index:20}
+.top-in{display:flex;align-items:center;justify-content:space-between;gap:24px;
+ max-width:1180px;margin:0 auto;padding:8px 8px 8px 20px;
+ border-radius:999px;border:1px solid var(--line);background:rgba(11,17,24,.75);backdrop-filter:blur(14px)}
+.brand-logo{height:28px;width:auto}
+.nav{display:flex;gap:32px;font-weight:700;font-size:15px}
+.nav a{color:var(--muted)}
+.nav a.on{color:var(--white)}
+.nav a:hover{color:var(--sky)}
+
+/* menu "tubelight" — indicador de luz animado embaixo do item ativo (recriado em CSS/JS puro a
+   partir de um componente React que o usuário mandou; ver script.js). Fica sem fundo/borda próprios
+   agora — quem dá a pílula é o .top-in, que já abraça logo+nav+botão juntos. */
+.nav.tubelight{
+  position:relative;
+  gap:2px;
+}
+.nav-item{
+  position:relative;
+  z-index:1;
+  padding:9px 20px;
+  border-radius:999px;
+  color:var(--muted);
+  transition:color .2s;
+}
+.nav-item:hover{color:var(--sky)}
+.nav-item.active{color:var(--white)}
+.lamp{
+  position:absolute;
+  top:5px;
+  height:calc(100% - 10px);
+  border-radius:999px;
+  background:rgba(0,151,255,.10);
+  transition:left .35s cubic-bezier(.4,0,.2,1), width .35s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;
+}
+.lamp:before{
+  content:"";
+  position:absolute;
+  top:-6px;
+  left:50%;
+  translate:-50% 0;
+  width:28px;
+  height:3px;
+  background:var(--azure);
+  border-radius:0 0 6px 6px;
+}
+.lamp:after{
+  content:"";
+  position:absolute;
+  top:-14px;
+  left:50%;
+  translate:-50% 0;
+  width:44px;
+  height:22px;
+  background:var(--azure);
+  opacity:.4;
+  filter:blur(11px);
+  border-radius:999px;
+}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:15px;padding:12px 22px;border-radius:999px;white-space:nowrap}
+/* mesma pílula translúcida do menu tubelight, pra combinar (23/09, pedido do usuário) */
+.btn-pill{
+  position:relative;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  backdrop-filter:blur(10px);
+  color:var(--white);
+  padding:11px 24px;
+}
+/* 23/09: hover do botão = só o fundo azul sutil (sem stroke nem brilho em cima, usuário pediu pra
+   tirar os dois) */
+.btn-pill:hover{background:rgba(0,151,255,.10);border-color:transparent;color:var(--white)}
+.btn-primary{background:var(--azure);color:var(--white)}
+.btn-primary:hover{background:var(--sky);color:var(--carbon)}
+
+/* 23/09: botão "Explorar soluções" recriado em CSS puro a partir do componente React/Tailwind que o
+   usuário mandou (borda + ponto com ripple no hover) — troquei o acento âmbar do original por
+   azul/sky da marca (sem cor nova fora da paleta estabelecida) */
+.btn-border{position:relative;border:1px solid var(--line);
+ background:rgba(255,255,255,.04);
+ overflow:hidden;backdrop-filter:blur(10px);
+ transition:border-color .5s ease-out,box-shadow .5s ease-out,transform .5s ease-out}
+.btn-border:hover{border-color:var(--white);box-shadow:0 0 20px rgba(255,255,255,.18);transform:scale(1.05)}
+.btn-border:active{transform:scale(.95)}
+.btn-border:before{content:"";position:absolute;inset:0;
+ background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent);
+ transform:translateX(-100%);transition:transform .7s ease-out}
+.btn-border:hover:before{transform:translateX(100%)}
+.btn-txt{position:relative;z-index:1;color:var(--white);font-weight:700;font-size:15px;transition:color .3s}
+.btn-border:hover .btn-txt{color:var(--sky)}
+.btn-dot{position:relative;z-index:1;width:14px;height:14px;border-radius:50%;background:var(--azure);
+ flex:none;transition:background .5s ease-out,box-shadow .5s ease-out,transform .5s ease-out}
+.btn-border:hover .btn-dot{background:var(--sky);box-shadow:0 0 10px rgba(111,203,255,.55);transform:scale(1.1)}
+.btn-border:active .btn-dot{transform:scale(.9)}
+.btn-ping{position:absolute;inset:0;border-radius:50%;background:var(--sky);opacity:0}
+.btn-border:hover .btn-ping{animation:btnPing 2s cubic-bezier(0,0,.2,1) infinite}
+@keyframes btnPing{0%{transform:scale(1);opacity:.75}75%,100%{transform:scale(2.6);opacity:0}}
+.btn-outline{border:1px solid var(--line);color:var(--white)}
+.btn-outline:hover{border-color:var(--sky);color:var(--sky)}
+.btn-dark{background:var(--panel);border:1px solid var(--line);color:var(--white);font-size:14px;padding:10px 18px}
+.btn-dark:hover{border-color:var(--sky);color:var(--sky)}
+
+/* ---- hero ---- */
+.hero{padding-block:64px 48px;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.badges{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.badge img{height:26px;width:auto;display:block}
+.hero h1{font-size:52px;line-height:1.08;max-width:none}
+.hero .lede{font-size:17px;color:var(--muted);margin:20px 0 0;max-width:46ch}
+.hero-copy .btn{margin-top:30px}
+.hero-art{align-self:center;display:flex;flex-direction:column;gap:20px}
+
+/* card de vídeo com selo de host, no estilo do print de referência do usuário (23/09) */
+.video-card{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:var(--panel)}
+.video-card{transform:perspective(900px) translate3d(0,0,0);transition:transform .3s ease-out;will-change:transform}
+.hero-video{display:block;width:100%;aspect-ratio:16/10.5;object-fit:cover;background:#000}
+.host-badge{position:absolute;top:20px;right:20px;display:flex;align-items:center;gap:10px;
+ background:rgba(11,17,24,.55);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.15);
+ border-radius:14px;padding:6px 16px 6px 6px;pointer-events:none}
+/* 23/09: ícone completo (círculo + marca já embutidos na própria imagem) */
+.host-ic{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex:none}
+.host-ic img{width:32px;height:32px;display:block;border-radius:50%}
+.host-badge b{display:block;font-size:11px;font-weight:400;line-height:1.3;color:var(--white)}
+.host-badge span{display:block;font-size:11px;color:var(--muted);margin-top:1px}
+
+/* 3 cards de estatística com ícone, abaixo do vídeo */
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.hs{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.hs-ic{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;
+ background:rgba(0,151,255,.12);color:var(--azure)}
+.hs-ic svg{width:18px;height:18px}
+
+/* 23/09: efeito "desenha a linha + nós pulsam" no hover, recriado em CSS/JS puro a partir do
+   componente React (Heroicons Animated / motion) que o usuário mandou — ver script.js pra medição
+   do comprimento de cada traço (getTotalLength) e o disparo do hover. */
+.hs-ic svg .ic-line{stroke-dasharray:var(--len,40);stroke-dashoffset:0;opacity:1}
+.hs-ic svg .ic-node{transform-box:fill-box;transform-origin:center}
+.hs-ic.anim svg .ic-line{animation:icLineDraw .4s ease-out}
+.hs-ic.anim svg .ic-node{animation:icNodePop .3s ease-out}
+.hs-ic.anim svg .ic-node:nth-of-type(1){animation-delay:0s}
+.hs-ic.anim svg .ic-node:nth-of-type(2){animation-delay:.15s}
+.hs-ic.anim svg .ic-node:nth-of-type(3){animation-delay:.3s}
+@keyframes icLineDraw{from{stroke-dashoffset:var(--len,40);opacity:0}to{stroke-dashoffset:0;opacity:1}}
+@keyframes icNodePop{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+.hs b{display:block;margin-top:14px;font-size:19px;font-weight:900;color:var(--white);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.hs b .pre{color:var(--azure)}
+.hs p{margin:6px 0 0;font-size:12px;color:var(--muted);line-height:1.4;white-space:nowrap}
+
+/* fileira dos 4 "big numbers" originais (15 anos / +60 / +20 / +400) — seção própria, posicionada
+   depois do "Bem-vindo a Asisto" (pedido do usuário, 01/10) */
+.stats-section{padding-block:56px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center}
+.stat .n{font-size:40px;font-weight:900;color:var(--white);line-height:1;font-variant-numeric:tabular-nums}
+.stat .n .pre{color:var(--azure)}
+.stat .l{margin-top:8px;font-size:14px;color:var(--muted);line-height:1.35}
+
+/* ---- bem-vindo (card com globo 3D) ----
+   Recriação em CSS/JS puro do componente React (Featured_05, usa a lib "cobe" via createGlobe) que
+   o usuário mandou. Ver globe.js. */
+.welcome-card{padding-block:56px}
+.wc-inner{position:relative;overflow:hidden;border-radius:28px;border:1px solid var(--line);
+ background:var(--panel);box-shadow:0 20px 50px rgba(0,0,0,.35);
+ padding:56px 48px;display:flex;align-items:center;justify-content:space-between;gap:40px}
+.wc-copy{position:relative;z-index:1;max-width:520px}
+.wc-copy h2{font-size:34px;line-height:1.15}
+.wc-copy h2 .accent{color:var(--sky);font-style:italic;font-weight:300}
+.wc-copy p{margin:18px 0 0;color:var(--muted);font-size:16px;line-height:1.6}
+.wc-cta{display:inline-flex;align-items:center;gap:8px;margin-top:26px;padding:12px 24px;
+ border-radius:999px;background:var(--white);color:var(--carbon);font-weight:800;font-size:15px;
+ transition:background .2s ease}
+.wc-cta:hover{background:var(--sky)}
+.wc-media{position:relative;flex:none;width:460px;aspect-ratio:4/3;border-radius:20px;overflow:hidden;
+ border:1px dashed var(--line);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center}
+.wc-media img{width:100%;height:100%;object-fit:cover}
+.wc-media-ph{color:var(--muted);font-size:14px}
+
+/* ---- produtos ---- */
+/* ---- carrossel "coverflow" de produtos (23/09) ----
+   Recriação em CSS/JS puro do componente React (CoverFlowCarousel) que o usuário mandou — 3D
+   perspective, cards laterais recuados, setas, autoplay, teclado, swipe. Troquei o acento dourado
+   do original (#c5a880) por azul/sky da marca, e as fotos por gradientes na cor oficial de cada
+   produto (não temos fotografia real de produto pra usar como imagem de fundo). Ver script.js. */
+.cf-section{position:relative;padding-block:56px;overflow:hidden}
+.cf-bg{position:absolute;inset:0;z-index:0;transition:background 1s ease;
+ background:radial-gradient(1200px 500px at 50% 20%,rgba(0,151,255,.10),transparent 65%);
+ -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 180px);
+ mask-image:linear-gradient(to bottom,transparent 0,#000 180px)}
+.cf-bg:after{content:"";position:absolute;inset:0;
+ background:radial-gradient(circle at center,rgba(11,17,24,.3) 0%,rgba(11,17,24,.94) 100%)}
+.cf-wrap{position:relative;z-index:1}
+.cf-eyebrow{text-align:center;margin:0 0 14px}
+.cf-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
+.cf-title{text-align:center;margin-bottom:34px}
+.cf-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+
+.cf-stage{position:relative;height:500px;display:flex;align-items:center;justify-content:center;perspective:1400px}
+.cf-card{position:absolute;width:310px;height:470px;border-radius:18px;overflow:hidden;
+ background:var(--panel);border:1px solid var(--line);transform-origin:center center;
+ transition:transform 800ms cubic-bezier(.25,1,.5,1),opacity 800ms cubic-bezier(.25,1,.5,1),filter 800ms cubic-bezier(.25,1,.5,1)}
+.cf-card.is-center{box-shadow:0 25px 60px rgba(0,0,0,.6),0 0 35px rgba(0,151,255,.20);cursor:default}
+.cf-card:not(.is-center){cursor:pointer}
+.cf-photo{position:absolute;inset:0;opacity:.9}
+.cf-card.fab .cf-photo{background:linear-gradient(135deg,#1a2f1a,#e8c400 60%,#3fae7a)}
+.cf-card.erp .cf-photo{background:linear-gradient(135deg,#0b1a2e,#0097ff 55%,#5a2ea6)}
+.cf-card.flow .cf-photo{background:linear-gradient(135deg,#0b2a28,#2fd3b0 55%,#7ee08a)}
+.cf-card.voice .cf-photo{background:linear-gradient(135deg,#241238,#6a5acd 45%,#e0793f)}
+.cf-card.lms .cf-photo{background:linear-gradient(135deg,#061726,#0057a8 60%,#0097ff)}
+.cf-shade{position:absolute;inset:0;
+ background:linear-gradient(180deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,.1) 25%,rgba(0,0,0,.68) 60%,rgba(0,0,0,.96) 100%)}
+/* 23/09: logo fica sempre visível (inclusive nos cards laterais, "pra o lead saber o que tem por
+   vir") — por isso saiu de dentro de .cf-content (que só aparece no card central) e ganhou posição
+   própria, sempre no centro do card. */
+.cf-logo{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);height:28px;width:auto;
+ z-index:2;opacity:.8;filter:drop-shadow(0 3px 10px rgba(0,0,0,.9));transition:opacity .4s ease}
+.cf-card.is-center .cf-logo{opacity:1}
+.cf-content{position:absolute;left:0;right:0;bottom:0;padding:22px 20px 26px;text-align:center;
+ opacity:0;transform:translateY(16px);transition:opacity 500ms ease,transform 500ms ease;pointer-events:none}
+.cf-card.is-center .cf-content{opacity:1;transform:translateY(0);pointer-events:auto}
+.cf-tag{position:static;text-align:center;font-size:12px;font-weight:700;letter-spacing:.04em;
+ color:rgba(255,255,255,.9);text-shadow:0 2px 6px rgba(0,0,0,.8)}
+.cf-rule{width:34px;height:2px;background:var(--azure);border-radius:2px;margin:12px auto;
+ box-shadow:0 0 8px rgba(0,151,255,.7)}
+.cf-body p{font-size:14px;font-style:italic;color:rgba(255,255,255,.9);max-width:260px;margin:0 auto 16px;
+ line-height:1.4;text-shadow:0 2px 8px rgba(0,0,0,.9)}
+.btn-sm{padding:9px 20px}
+.btn-sm .btn-txt{font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+
+.cf-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;
+ background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:var(--white);
+ display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);cursor:pointer;
+ box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:5;transition:border-color .2s,background .2s}
+.cf-nav:hover{border-color:var(--sky);background:rgba(0,0,0,.75)}
+.cf-nav svg{width:20px;height:20px}
+.cf-nav.prev{left:0}
+.cf-nav.next{right:0}
+
+.cf-dots{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:28px}
+.cf-dots button{height:8px;width:8px;border-radius:999px;background:rgba(255,255,255,.25);
+ border:none;cursor:pointer;padding:0;transition:all .3s ease}
+.cf-dots button.on{width:28px;background:var(--azure);box-shadow:0 0 10px rgba(0,151,255,.7)}
+
+/* ---- modelo de atuação (produto e serviço) ---- */
+.model{padding-block:56px;text-align:center}
+.model h2{font-size:34px;line-height:1.15}
+.model h2 .accent{color:var(--sky);font-style:italic;font-weight:300}
+.mo-eyebrow{margin:0 0 18px}
+.mo-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
+.mo-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;text-align:center}
+
+/* entrada com fade+slide escalonado (IntersectionObserver) e spotlight que segue o mouse no hover
+   — recriação em CSS/JS puro do componente React (Feature32 + SpotlightCard, usa framer-motion)
+   que o usuário mandou. Ver script.js. */
+.mo-col{
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;padding:40px 32px;
+  border:1px solid var(--line);border-radius:22px;background:var(--panel);
+  opacity:0;transform:translateY(25px);
+  transition:opacity .6s ease,transform .6s ease,border-color .3s ease;
+}
+.mo-col.in{opacity:1;transform:translateY(0)}
+.mo-col:nth-child(1){transition-delay:0s}
+.mo-col:nth-child(2){transition-delay:.12s}
+.mo-col:nth-child(3){transition-delay:.24s}
+.mo-col:hover{border-color:rgba(0,151,255,.45)}
+.mo-col::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(0,151,255,.14),transparent 70%);
+  opacity:0;transition:opacity .3s ease;
+}
+.mo-col:hover::before{opacity:1}
+.mo-col>*{position:relative;z-index:1}
+.mo-ic{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:14px;border:1px solid rgba(0,151,255,.3);background:rgba(0,151,255,.12);color:var(--sky);transition:transform .3s ease,background .3s ease,color .3s ease}
+.mo-col:hover .mo-ic{transform:scale(1.1);background:var(--azure);color:var(--white)}
+.mo-ic svg{width:24px;height:24px}
+.mo-tag{margin:22px 0 0;font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--sky)}
+.mo-col h3{margin-top:10px;font-size:24px;line-height:1.2}
+.mo-desc{margin:14px 0 0;font-size:15px;line-height:1.6;color:var(--muted)}
+.mo-sub{margin:28px 0 12px;font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.mo-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.mo-pills span{padding:8px 16px;border-radius:999px;border:1px solid rgba(111,203,255,.35);background:rgba(0,151,255,.06);font-size:11px;color:var(--white)}
+
+/* ---- serviço / crescimento contínuo ----
+   Recriação em CSS/JS puro do print de referência que o usuário mandou (gráfico de crescimento +
+   lista de 5 itens). Original é em tema claro; adaptado pra paleta azul/sky sobre fundo escuro,
+   igual ao resto do site. */
+.service-growth{padding-block:56px}
+.sg-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.sg-eyebrow{margin:0 0 18px}
+.sg-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
+.sg-label{margin:0 0 12px;font-size:11px;font-style:italic;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sg-title{font-size:34px;line-height:1.15}
+.sg-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+.sg-chart{position:relative;margin:32px 0 40px;cursor:crosshair}
+.sg-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.sg-line{filter:drop-shadow(0 0 3px rgba(111,203,255,.5))}
+/* ponto + linha-guia que seguem o mouse sobre a curva, e tooltip com o valor (pedido do usuário,
+   01/10) — recriação em JS puro do <Tooltip/> do recharts (sem dado real: a curva é ilustrativa,
+   então o tooltip mostra a % de crescimento ao longo da própria curva, não uma métrica da empresa) */
+#sgGuide{stroke:rgba(111,203,255,.35);stroke-width:1;opacity:0;transition:opacity .15s ease}
+#sgDot{fill:var(--sky);stroke:var(--carbon);stroke-width:2;opacity:0;transition:opacity .15s ease}
+.sg-tooltip{position:absolute;left:0;top:0;transform:translate(-50%,-135%);padding:6px 10px;
+ border-radius:8px;background:var(--carbon);border:1px solid rgba(0,151,255,.4);
+ font-size:13px;font-weight:800;color:var(--white);white-space:nowrap;
+ opacity:0;pointer-events:none;transition:opacity .15s ease;z-index:2}
+.sg-sub{font-size:24px;line-height:1.2}
+.sg-desc{margin:10px 0 0;font-size:15px;line-height:1.6;color:var(--muted);max-width:360px}
+
+.sg-list{display:flex;flex-direction:column;gap:16px}
+.sg-item{display:flex;align-items:flex-start;gap:18px;padding:22px 24px;border:1px solid var(--line);border-radius:16px;background:var(--panel);transition:border-color .3s ease}
+.sg-item:hover{border-color:rgba(0,151,255,.4)}
+.sg-ic{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);color:var(--sky)}
+.sg-ic svg{width:20px;height:20px}
+.sg-item h4{margin:0;font-size:17px;font-weight:800;color:var(--white)}
+.sg-item p{margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--muted)}
+
+/* ---- ERP próprio ---- (recriação em CSS puro do print de referência que o usuário mandou) */
+.erp-own{padding-block:56px;text-align:center}
+.eo-eyebrow{margin:0 0 18px}
+.eo-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
+.eo-title{font-size:34px;line-height:1.3}
+.eo-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+.eo-desc{max-width:720px;margin:20px auto 0;color:var(--muted);font-size:16px;line-height:1.7}
+
+.eo-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:48px;text-align:left}
+.eo-col{transition:transform .35s cubic-bezier(.25,1,.5,1)}
+.eo-col:hover{transform:scale(1.045)}
+.eo-ic{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:14px;border:1px solid rgba(0,151,255,.3);background:rgba(0,151,255,.12);color:var(--sky)}
+.eo-ic svg{width:24px;height:24px}
+.eo-col h3{margin-top:22px;font-size:20px;letter-spacing:.02em;text-transform:uppercase}
+.eo-col>p{margin:10px 0 0;font-size:14px;line-height:1.6;color:var(--muted)}
+.eo-rule{width:48px;height:2px;margin:20px 0;background:rgba(0,151,255,.4)}
+.eo-list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 20px}
+.eo-list li{position:relative;padding-left:14px;font-size:14px;color:var(--white)}
+.eo-list li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--sky)}
+
+/* ---- módulos (abas Gestão/Atendimento/Aprendizado/Relacionamento) ----
+   Recriação em CSS/JS puro do print de referência que o usuário mandou. Ícones vêm dos SVGs lucide
+   já usados na apresentação comercial (entregas/asisto-institucional/build/icons). Ver script.js
+   pro toggle das abas. */
+.modules{padding-block:56px;text-align:center}
+.md-eyebrow{margin:0 0 18px}
+.md-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
+.md-title{font-size:34px;line-height:1.2}
+.md-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+
+.md-tabs{display:inline-flex;gap:4px;padding:6px;margin:28px 0 36px;border-radius:999px;background:var(--panel);border:1px solid var(--line)}
+.md-tab{padding:10px 20px;border-radius:999px;border:none;background:transparent;color:var(--muted);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .25s ease,color .25s ease}
+.md-tab:hover:not(.active){color:var(--white)}
+.md-tab.active{background:var(--white);color:var(--carbon)}
+
+.md-grid{text-align:left}
+.md-group{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.md-group[hidden]{display:none}
+.md-item{display:inline-flex;align-items:center;gap:12px;padding:12px 20px 12px 12px;border:1px solid var(--line);border-radius:14px;background:var(--panel);transition:border-color .3s ease,transform .3s ease}
+.md-item:hover{border-color:rgba(0,151,255,.4);transform:translateY(-2px)}
+.md-ic{flex:none;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:999px;border:1px solid rgba(0,151,255,.3);background:rgba(0,151,255,.12);color:var(--sky)}
+.md-ic svg{width:16px;height:16px}
+.md-item span:last-child{font-size:15px;font-weight:700;color:var(--white);white-space:nowrap}
+
+/* ---- comparativo (imersão x diagnóstico) ----
+   Conteúdo do print branco que o usuário mandou (tabela comparativa "Sob medida"), layout inspirado
+   no print preto de referência (card único com divisória central, ícone + label por coluna, linhas
+   com divisória horizontal) — adaptado pra paleta da Asisto. */
+.compare{padding-block:56px}
+.cp-eyebrow{margin:0 0 18px}
+.cp-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
+.cp-title{font-size:34px;line-height:1.3;max-width:640px}
+.cp-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+
+.cp-card{margin-top:40px;display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:18px;background:var(--panel);overflow:hidden}
+.cp-col{padding:28px 32px}
+.cp-col:first-child{border-right:1px solid var(--line)}
+.cp-head{margin-bottom:12px}
+.cp-head h3{font-size:22px;color:var(--white)}
+.cp-head h3.cp-sky{color:var(--sky)}
+.cp-row{display:flex;gap:10px;padding:8px 0}
+.cp-check{flex:none;margin-top:2px;color:var(--sky)}
+.cp-check svg{display:block;width:16px;height:16px}
+.cp-label{margin:0;font-size:11px;font-style:italic;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cp-value{margin:2px 0 0;font-size:15px;line-height:1.5;color:var(--white)}
+.cp-note{margin:20px 0 0;font-size:13px;color:var(--muted)}
+
+
+/* ---- onde o processo perde (diagnóstico) ----
+   Conteúdo e layout do print que o usuário mandou: grade 3x2 estilo tabela, com divisórias entre
+   colunas e linhas. Ícones lucide da pasta da apresentação comercial. */
+.diag{padding-block:56px}
+.dg-eyebrow{margin:0 0 18px;text-align:center}
+.dg-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
+.dg-title{font-size:34px;line-height:1.25;text-align:center}
+.dg-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+.dg-sub{margin:16px 0 0;font-size:15px;color:var(--muted);text-align:center}
+
+/* grid de cards arredondados (padrão do site) com efeito de hover — recriação em CSS puro do
+   componente React (FeaturesSectionWithHoverEffects, usa group/group-hover do Tailwind) que o
+   usuário mandou: wash de gradiente, barra lateral que cresce e muda de cor, título que desliza. */
+.dg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:24px}
+.dg-item{position:relative;overflow:hidden;padding:28px 32px;border:1px solid var(--line);border-radius:18px;background:var(--panel);transition:border-color .3s ease}
+.dg-item:hover{border-color:rgba(0,151,255,.35)}
+.dg-item::before{content:"";position:absolute;inset:0;z-index:0;opacity:0;pointer-events:none;transition:opacity .25s ease;
+ background:linear-gradient(180deg,rgba(0,151,255,.12),transparent 70%)}
+.dg-item:nth-child(n+4)::before{background:linear-gradient(0deg,rgba(0,151,255,.12),transparent 70%)}
+.dg-item:hover::before{opacity:1}
+.dg-ic{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,151,255,.3);background:rgba(0,151,255,.12);color:var(--sky)}
+.dg-ic svg{width:20px;height:20px}
+.dg-item-title{position:relative;z-index:1;margin-top:16px;padding-left:16px}
+.dg-bar{position:absolute;left:0;top:50%;transform:translateY(-50%);height:20px;width:3px;border-radius:999px;background:var(--line);transition:height .25s ease,background .25s ease}
+.dg-item:hover .dg-bar{height:28px;background:var(--azure)}
+.dg-item-title p{margin:0;font-size:16px;font-weight:700;line-height:1.4;color:var(--white);transition:transform .25s ease}
+.dg-item:hover .dg-item-title p{transform:translateX(6px)}
+
+/* ---- metodologia ágil ---- (print de referência que o usuário mandou) */
+.agile{padding-block:56px}
+.ag-eyebrow{margin:0 0 18px;text-align:center}
+.ag-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
+.ag-title{font-size:34px;line-height:1.25;text-align:center}
+.ag-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+
+/* 5 blocos em formato "stepper" (círculo numerado + linha conectora) — recriação em CSS puro do
+   componente React (Stepper/StepperIndicator/StepperSeparator, shadcn) que o usuário mandou. Como
+   a página é estática (sem estado de progresso real), todos os círculos ficam no mesmo estilo,
+   sem simular "ativo/concluído". */
+.ag-steps{display:flex;align-items:flex-start;margin-top:40px}
+.ag-step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 8px;
+ opacity:0;transform:scale(.5);transition:opacity .5s ease,transform .5s cubic-bezier(.34,1.56,.64,1)}
+.ag-steps.in .ag-step{opacity:1;transform:scale(1)}
+.ag-steps.in .ag-step:nth-of-type(1){transition-delay:0s}
+.ag-steps.in .ag-step:nth-of-type(2){transition-delay:.1s}
+.ag-steps.in .ag-step:nth-of-type(3){transition-delay:.2s}
+.ag-steps.in .ag-step:nth-of-type(4){transition-delay:.3s}
+.ag-steps.in .ag-step:nth-of-type(5){transition-delay:.4s}
+.ag-circle{display:flex;align-items:center;justify-content:center;flex:none;width:32px;height:32px;border-radius:999px;border:1px solid rgba(0,151,255,.4);background:rgba(0,151,255,.15);color:var(--sky);font-size:14px;font-weight:800}
+.ag-step p{margin:14px 0 0;font-size:15px;font-weight:700;color:var(--white);line-height:1.3}
+.ag-sep{flex:1;height:1px;margin-top:16px;background:var(--line);transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.ag-steps.in .ag-sep{transform:scaleX(1)}
+.ag-steps.in .ag-sep:nth-of-type(1){transition-delay:.1s}
+.ag-steps.in .ag-sep:nth-of-type(2){transition-delay:.2s}
+.ag-steps.in .ag-sep:nth-of-type(3){transition-delay:.3s}
+.ag-steps.in .ag-sep:nth-of-type(4){transition-delay:.4s}
+
+.ag-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.ag-pillar{padding:28px;border:1px solid var(--line);border-radius:16px;background:var(--panel);opacity:.55;transition:opacity .3s ease,border-color .3s ease}
+.ag-pillar:hover{opacity:1;border-color:rgba(0,151,255,.35)}
+.ag-pillar h4{font-size:18px;color:var(--white)}
+.ag-pillar p{margin:10px 0 0;font-size:14px;line-height:1.6;color:var(--muted)}
+
+/* ---- clientes ---- */
+.clients{padding-block:56px}
+.clients-title{font-size:34px;line-height:1.25;margin-bottom:24px}
+.clients-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+/* esteira infinita com fade nas bordas e pausa no hover — recriação em CSS puro do componente React
+   (InfiniteMovingCards, usa framer-motion + useAnimationFrame) que o usuário mandou. A animação é
+   um @keyframes translateX(-50%) sobre a faixa duplicada via JS (ver script.js), looping sem costura. */
+.client-viewport{position:relative;overflow:hidden;margin-top:4px}
+.client-viewport::before,.client-viewport::after{content:"";position:absolute;top:0;bottom:0;width:64px;z-index:2;pointer-events:none}
+.client-viewport::before{left:0;background:linear-gradient(90deg,var(--carbon),transparent)}
+.client-viewport::after{right:0;background:linear-gradient(270deg,var(--carbon),transparent)}
+.client-track{display:flex;gap:16px;width:max-content;animation:client-marquee 36s linear infinite}
+.client-viewport:hover .client-track{animation-play-state:paused}
+@keyframes client-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.client-track{animation:none}}
+.client-card{flex:none;width:170px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+ padding:22px 20px;border:1px solid var(--line);border-radius:16px;background:var(--panel);transition:border-color .3s ease}
+.client-card:hover{border-color:rgba(0,151,255,.4)}
+.client-card::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(0,151,255,.16),transparent 70%);
+ opacity:0;transition:opacity .3s ease}
+.client-card:hover::before{opacity:1}
+.client-card img{position:relative;z-index:1;max-width:100%;height:44px;width:auto;object-fit:contain;opacity:.85;transition:opacity .3s ease}
+.client-card:hover img{opacity:1}
+
+/* ---- time ---- */
+.team{padding-block:56px;text-align:center}
+.team-eyebrow{margin:0 0 18px}
+.team-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
+.team-title{font-size:34px;line-height:1.25}
+.team-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+.teamgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:36px;text-align:left}
+/* entrada com fade+slide escalonado, e zoom na foto no hover — recriação em CSS/JS puro do
+   componente React (TeamGrid, usa motion/react) que o usuário mandou. Ver script.js. */
+.person{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease,scale .3s ease}
+.teamgrid.in .person{opacity:1;transform:translateY(0)}
+.teamgrid.in .person:nth-of-type(1){transition-delay:0s}
+.teamgrid.in .person:nth-of-type(2){transition-delay:.1s}
+.teamgrid.in .person:nth-of-type(3){transition-delay:.2s}
+.teamgrid.in .person:nth-of-type(4){transition-delay:.3s}
+.person:hover{scale:1.02}
+.person-photo{position:relative;overflow:hidden;border-radius:14px}
+.person-photo img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;transition:transform .3s ease}
+.person:hover .person-photo img{transform:scale(1.05)}
+.person-photo::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:linear-gradient(135deg,rgba(0,0,0,.18),transparent);opacity:0;transition:opacity .3s ease}
+.person:hover .person-photo::after{opacity:1}
+.person .role{margin-top:14px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sky);font-weight:800}
+.person .nm{margin-top:4px;font-size:19px;font-weight:800;color:var(--white)}
+.person .bio{margin-top:8px;font-size:13px;line-height:1.5;color:var(--muted)}
+
+/* ---- cta ----
+   Card arredondado com fundo em glow + grid (texto à esquerda, botões à direita), entrada com
+   fade+slide escalonado — recriação em CSS/JS puro do componente React (CtaCard, usa framer-motion)
+   que o usuário mandou. O form de e-mail do original virou os botões de WhatsApp que já existiam
+   (não temos backend pra capturar e-mail, e os botões já cumprem o papel de CTA). Ver script.js. */
+.cta{padding-block:56px}
+.cta-card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:24px;background:var(--panel);padding:48px}
+/* BG mesh gradient: recriação em CSS puro do MeshGradient (paper-design/shaders) que o usuário mandou,
+   com as mesmas 4 cores — 4 manchas desfocadas que derivam devagar sobre a cor-base */
+.cta-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:hsl(216,90%,27%)}
+.cta-bg i{position:absolute;border-radius:50%;filter:blur(60px);will-change:transform}
+.cta-bg i:nth-child(1){width:60%;height:140%;left:-10%;top:-30%;background:hsl(243,68%,36%);animation:ctaMesh1 14s ease-in-out infinite alternate}
+.cta-bg i:nth-child(2){width:55%;height:120%;right:-8%;top:-10%;background:hsl(205,91%,64%);animation:ctaMesh2 17s ease-in-out infinite alternate}
+.cta-bg i:nth-child(3){width:50%;height:100%;left:25%;bottom:-45%;background:hsl(211,61%,57%);animation:ctaMesh3 12s ease-in-out infinite alternate}
+.cta-bg i:nth-child(4){width:40%;height:90%;left:5%;bottom:-30%;background:hsl(216,90%,27%);animation:ctaMesh2 20s ease-in-out infinite alternate-reverse}
+@keyframes ctaMesh1{to{transform:translate(35%,25%) scale(1.15) rotate(20deg)}}
+@keyframes ctaMesh2{to{transform:translate(-40%,30%) scale(.85) rotate(-25deg)}}
+@keyframes ctaMesh3{to{transform:translate(-30%,-30%) scale(1.2) rotate(15deg)}}
+@media (prefers-reduced-motion:reduce){.cta-bg i{animation:none}}
+.cta-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center}
+.cta-copy{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.cta-card.in .cta-copy{opacity:1;transform:translateY(0)}
+.cta h2{font-size:32px;line-height:1.25;text-align:left;text-shadow:0 2px 16px rgba(0,0,0,.3)}
+.cta-copy p{margin:14px 0 0;color:rgba(255,255,255,.9);font-size:16px;max-width:40ch}
+.cta-btns{display:flex;gap:16px;justify-content:flex-end;
+ opacity:0;transform:translateY(20px);transition:opacity .6s ease .15s,transform .6s ease .15s}
+.cta-card.in .cta-btns{opacity:1;transform:translateY(0)}
+
+/* ---- faq ---- */
+.faq{padding-block:56px}
+.faq-eyebrow{margin:0 0 18px;text-align:center}
+.faq-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
+.faq-title{font-size:34px;line-height:1.25;text-align:center;margin-bottom:36px}
+.faq-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+.faqlist{border-top:1px solid var(--line)}
+.faqlist details{border-bottom:1px solid var(--line);padding:20px 0}
+.faqlist summary{font-weight:700;font-size:16px;color:var(--white);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.faqlist summary::-webkit-details-marker{display:none}
+.faqlist summary:after{content:"+";font-size:22px;color:var(--muted);transition:transform .2s}
+.faqlist details[open] summary:after{content:"–"}
+.faqlist p{margin:14px 0 0;color:var(--muted);font-size:15px;line-height:1.6;max-width:70ch}
+
+/* ---- footer ---- */
+.foot{border-top:1px solid var(--line);padding-block:36px;margin-top:20px}
+.foot-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.foot-social{display:flex;gap:12px}
+.foot-social a{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);color:var(--white);transition:color .2s,border-color .2s,background .2s}
+.foot-social a:hover{color:var(--sky);border-color:rgba(111,203,255,.5);background:rgba(0,151,255,.1)}
+.foot-social svg{display:block;width:18px;height:18px}
+.foot-locs{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:36px}
+.foot-loc{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:20px;overflow:hidden}
+.foot-loc-title{margin:0;font-size:16px;font-weight:800;color:var(--white)}
+.foot-loc-addr{margin:4px 0 14px;font-size:14px;color:var(--muted)}
+.foot-loc iframe{display:block;width:100%;height:240px;border:0;border-radius:12px;filter:invert(.92) hue-rotate(180deg) saturate(.7)}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.foot-bottom p{margin:0}
+.foot-brand{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.badges.small .badge img{height:18px}
+.foot-links{display:flex;gap:24px;font-size:13px;color:var(--muted)}
+.foot-links a:hover{color:var(--sky)}
+
+/* ---- responsive ---- */
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;padding-top:44px}
+  .hero-art{order:-1}
+  .hero h1{font-size:38px;max-width:none}
+  .stats{grid-template-columns:1fr 1fr;gap:24px 16px}
+  .teamgrid{grid-template-columns:1fr 1fr}
+  .nav{display:none}
+  .welcome-card,.cf-section,.clients,.team,.cta,.faq{padding-block:36px}
+  h2{font-size:28px}
+}
+@media (max-width:560px){
+  .stats{grid-template-columns:1fr 1fr}
+  .teamgrid{grid-template-columns:1fr}
+  .cta-btns{flex-direction:column}
+}
+.cf-nav:disabled{opacity:.3;cursor:default;pointer-events:none}
+
+/* ---- avatares do time com tooltip animado ----
+   Recriação em CSS/JS puro do AnimatedTooltip (React + framer-motion) que o usuário mandou: avatares
+   sobrepostos, no hover o cartão com nome/cargo sobe com "mola" e inclina/desloca conforme o mouse. */
+.at-section{padding-block:24px 56px}
+.at-row{display:flex;justify-content:center;align-items:center;padding-top:72px;margin-top:-26px}
+.at-item{position:relative;margin-right:-26px}
+.at-item img{display:block;width:104px;height:104px;border-radius:50%;object-fit:cover;object-position:top;
+ border:3px solid var(--carbon);position:relative;transition:transform .5s ease}
+.at-item:hover img{transform:scale(1.05);z-index:30}
+.at-item:hover{z-index:30}
+.at-tip{position:absolute;left:50%;bottom:calc(100% + 10px);z-index:50;display:flex;flex-direction:column;
+ align-items:center;white-space:nowrap;padding:10px 20px;border-radius:10px;background:var(--white);
+ box-shadow:0 12px 30px rgba(0,0,0,.45);pointer-events:none;opacity:0;
+ --tx:0px;--rot:0deg;transform:translateX(calc(-50% + var(--tx))) translateY(20px) scale(.6) rotate(var(--rot));
+ transition:opacity .2s ease,transform .45s cubic-bezier(.34,1.56,.64,1)}
+.at-item:hover .at-tip{opacity:1;transform:translateX(calc(-50% + var(--tx))) translateY(0) scale(1) rotate(var(--rot))}
+.at-tip b{position:relative;z-index:1;font-size:17px;font-weight:800;color:var(--carbon)}
+.at-tip span{position:relative;z-index:1;font-size:13px;color:#5b6b7b}
+.at-line{position:absolute;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--sky),transparent)}
+.at-line-a{left:40px;right:40px}
+.at-line-b{left:40px;width:40%;background:linear-gradient(90deg,transparent,var(--azure),transparent)}
+@media (prefers-reduced-motion:reduce){.at-tip,.at-item img{transition:opacity .2s ease}}
+.at-tip span:empty{display:none}
+.at-row{flex-wrap:wrap}
+
+/* seção "Bem-vindo": fotos em rodízio com fade (5 imagens 4:3) */
+.wc-media{border:1px solid var(--line);background:var(--panel)}
+.wc-slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
+.wc-slide.on{opacity:1}
+.wc-nav{position:absolute;top:50%;z-index:2;width:34px;height:34px;margin-top:-17px;border-radius:50%;border:1px solid rgba(255,255,255,.25);
+ background:rgba(11,17,24,.6);backdrop-filter:blur(6px);color:#fff;display:grid;place-items:center;cursor:pointer;
+ opacity:0;transition:opacity .25s ease,background .2s ease}
+.wc-nav svg{width:16px;height:16px}
+.wc-nav.prev{left:10px}.wc-nav.next{right:10px}
+.wc-media:hover .wc-nav,.wc-nav:focus-visible{opacity:1}
+.wc-nav:hover{background:rgba(0,151,255,.55)}
+.wc-dots{position:absolute;left:0;right:0;bottom:10px;z-index:2;display:flex;justify-content:center;gap:6px}
+.wc-dots button{width:7px;height:7px;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.45);cursor:pointer;transition:width .25s ease,background .2s ease}
+.wc-dots button.on{width:20px;background:#fff}
