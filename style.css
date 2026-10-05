@@ -769,3 +769,22 @@ a{color:inherit;text-decoration:none}
   .foot-brand{gap:16px}
   .foot-links{flex-wrap:wrap;gap:8px 20px}
 }
+
+/* mobile: clientes e time viram faixas roláveis com o dedo (05/10/2026) */
+.team-dots{display:none}
+@media (max-width:700px){
+  /* clientes: sem animação CSS; a rolagem automática é feita em JS (script.js) e o dedo assume quando toca */
+  .client-viewport{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x pan-y}
+  .client-viewport::-webkit-scrollbar{display:none}
+  .client-track{animation:none}
+
+  /* time: carrossel com snap + pontos */
+  .teamgrid{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 20px;
+   margin:28px -20px 0;padding:0 20px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .teamgrid::-webkit-scrollbar{display:none}
+  .person{flex:0 0 78%;scroll-snap-align:center}
+  .person .bio{font-size:13px}
+  .team-dots{display:flex;justify-content:center;gap:8px;margin-top:20px}
+  .team-dots button{height:8px;width:8px;border-radius:999px;border:0;padding:0;background:rgba(255,255,255,.25);transition:all .3s ease}
+  .team-dots button.on{width:28px;background:var(--azure);box-shadow:0 0 10px rgba(0,151,255,.7)}
+}

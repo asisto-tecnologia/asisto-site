@@ -551,3 +551,75 @@ document.querySelectorAll('.faqlist details').forEach(function(d){
   dots[0].classList.add('on');
   restart();
 })();
+
+
+// Mobile: esteira de clientes rola sozinha (JS) e o dedo assume — pausa ao tocar e volta depois de 2s.
+// Time: pontos de paginação sincronizados com o carrossel (scroll-snap).
+(function () {
+  var mq = window.matchMedia('(max-width: 700px)');
+
+  var vp = document.querySelector('.client-viewport');
+  if (vp) {
+    var pos = 0, last = 0, touching = false, resumeAt = 0;
+    function half() { return vp.scrollWidth / 2; }
+    function tick(t) {
+      if (mq.matches) {
+        var dt = last ? Math.min(t - last, 50) : 16;
+        if (touching || t < resumeAt) { pos = vp.scrollLeft; }
+        else {
+          pos += dt * 0.04; // ~40px/s
+          if (pos >= half()) pos -= half();
+        }
+        if (!touching) {
+          if (pos < 0) pos += half();
+          vp.scrollLeft = pos;
+          if (t >= resumeAt && vp.scrollLeft >= half()) { pos = vp.scrollLeft - half(); vp.scrollLeft = pos; }
+        }
+      }
+      last = t;
+      requestAnimationFrame(tick);
+    }
+    function hold() { resumeAt = performance.now() + 2000; }
+    vp.addEventListener('touchstart', function () { touching = true; });
+    vp.addEventListener('touchend', function () { touching = false; hold(); });
+    vp.addEventListener('touchcancel', function () { touching = false; hold(); });
+    vp.addEventListener('scroll', function () {
+      // rolagem manual passou da metade: volta uma cópia pra trás sem costura
+      if (touching || performance.now() < resumeAt) {
+        var h = half();
+        if (vp.scrollLeft >= h) vp.scrollLeft -= h;
+        else if (vp.scrollLeft <= 0) vp.scrollLeft += h;
+      }
+    }, { passive: true });
+    requestAnimationFrame(tick);
+  }
+
+  var grid = document.querySelector('.teamgrid');
+  if (grid) {
+    var people = Array.prototype.slice.call(grid.querySelectorAll('.person'));
+    var dotsWrap = document.createElement('div');
+    dotsWrap.className = 'team-dots';
+    var dots = people.map(function (p, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Ir pra pessoa ' + (i + 1));
+      b.addEventListener('click', function () {
+        grid.scrollTo({ left: p.offsetLeft - (grid.clientWidth - p.offsetWidth) / 2, behavior: 'smooth' });
+      });
+      dotsWrap.appendChild(b);
+      return b;
+    });
+    grid.parentNode.insertBefore(dotsWrap, grid.nextSibling);
+    function sync() {
+      var c = grid.scrollLeft + grid.clientWidth / 2, best = 0, bd = 1e9;
+      people.forEach(function (p, i) {
+        var d = Math.abs(p.offsetLeft + p.offsetWidth / 2 - c);
+        if (d < bd) { bd = d; best = i; }
+      });
+      dots.forEach(function (d, i) { d.classList.toggle('on', i === best); });
+    }
+    grid.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  }
+})();
