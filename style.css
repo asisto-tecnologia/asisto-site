@@ -853,3 +853,8 @@ a{color:inherit;text-decoration:none}
 .blog-more:hover{background:rgba(0,151,255,.10);border-color:rgba(0,151,255,.4)}
 .blog-more[hidden]{display:none}
 .post-body strong{color:var(--white);font-weight:800}
+
+/* card do Asisto Atende no carrossel (logo oficial entra depois; por ora, texto no lugar da imagem) */
+.cf-card.atende .cf-photo{background:linear-gradient(135deg,#030a14,#0066cc 55%,#00d2ff)}
+.cf-logo-txt{display:flex;align-items:baseline;gap:6px;height:auto;white-space:nowrap;font-size:26px;font-weight:300;letter-spacing:-.01em;color:var(--white)}
+.cf-logo-txt b{font-weight:900;font-style:normal}

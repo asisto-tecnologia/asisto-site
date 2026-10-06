@@ -129,7 +129,7 @@
   var prevBtn = document.getElementById('cfPrev');
   var nextBtn = document.getElementById('cfNext');
   var section = document.getElementById('solucoes');
-  var currentIndex = 2; // começa no FLOW: com 5 cards, a tela lê FAB · ERP · FLOW · VOICE · LMS
+  var currentIndex = 2; // começa no FLOW: com 6 cards, a tela lê FAB · ERP · FLOW · ATENDE · VOICE
   var autoplayDelay = 5000;
   var autoplayTimer = null;
   var isHovered = false;
