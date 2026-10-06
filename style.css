@@ -858,3 +858,12 @@ a{color:inherit;text-decoration:none}
 .cf-card.atende .cf-photo{background:linear-gradient(135deg,#030a14,#0066cc 55%,#00d2ff)}
 .cf-logo-txt{display:flex;align-items:baseline;gap:6px;height:auto;white-space:nowrap;font-size:26px;font-weight:300;letter-spacing:-.01em;color:var(--white)}
 .cf-logo-txt b{font-weight:900;font-style:normal}
+
+/* página 404 */
+.nf{padding-block:96px 72px;text-align:center}
+.nf-code{margin:0;font-size:96px;font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--sky)}
+.nf-title{margin-top:12px;font-size:40px;line-height:1.15}
+.nf-title .accent{color:var(--sky);font-style:italic;font-weight:300}
+.nf-sub{margin:16px auto 0;max-width:46ch;font-size:17px;color:var(--muted)}
+.nf-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:32px}
+@media (max-width:700px){.nf{padding-block:56px 40px}.nf-code{font-size:72px}.nf-title{font-size:30px}}

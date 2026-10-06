@@ -48,6 +48,13 @@ jobs:
             --include 'script.js' \
             --include 'style.css' \
             --include 'blog/*' \
+            --include 'post/*' \
+            --include '404.html' \
+            --include 'robots.txt' \
+            --include 'sitemap.xml' \
+            --include 'favicon.ico' \
+            --include 'favicon.png' \
+            --include 'apple-touch-icon.png' \
             --include 'imagens/*' \
             --include 'videos/*'
 
