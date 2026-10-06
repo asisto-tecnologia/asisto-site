@@ -1,0 +1,58 @@
+name: Deploy production site
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy-production:
+    name: Publish production to S3 and CloudFront
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      AWS_REGION: sa-east-1
+      S3_BUCKET_NAME: ${{ vars.S3_BUCKET_NAME }}
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Validate production settings
+        run: |
+          test -n "$S3_BUCKET_NAME"
+          test -n "$CLOUDFRONT_DISTRIBUTION_ID"
+
+      - name: Upload static site
+        run: |
+          aws s3 sync . "s3://$S3_BUCKET_NAME/" \
+            --delete \
+            --exclude '*' \
+            --include 'index.html' \
+            --include 'script.js' \
+            --include 'style.css' \
+            --include 'blog/*' \
+            --include 'imagens/*' \
+            --include 'videos/*'
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" \
+            --paths '/*'
