@@ -952,10 +952,10 @@ a{color:inherit;text-decoration:none}
 .pp-plan .pp-list{margin-top:20px;gap:10px}
 .pp-plan .pp-list li{font-size:15px}
 .pp-plan .pp-list li:before{background:var(--c2)}
-.pp-plan{--c1:#0b2420;--c2:#27a98c;position:relative}
+.pp-plan{--c1:#0e1b1d;--c2:#27a98c;position:relative}
 .pp-plan>*{position:relative}
 /* hover discreto: um véu verde-claro surge por cima e os pontos clareiam (o degradê não anima, então o véu é uma camada com opacity) */
-.pp-plan:before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(126,224,138,.13),transparent 72%);opacity:0;transition:opacity .35s ease;pointer-events:none}
+.pp-plan:before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(126,224,138,.08),transparent 72%);opacity:0;transition:opacity .35s ease;pointer-events:none}
 .pp-plan:hover:before{opacity:1}
 .pp-plan:hover{--c2:#7ee08a}
 .pp-plan h3:after,.pp-plan .pp-list li:before{transition:background .3s ease}
