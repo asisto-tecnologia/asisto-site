@@ -681,3 +681,44 @@ document.querySelectorAll('.faqlist details').forEach(function(d){
     measure();
   });
 })();
+
+/* CARTAO COM LUZ ([data-glow]): o foco de luz e o brilho da borda acompanham o mouse com suavidade (o ponto
+   "persegue" o cursor em vez de pular). As duas luzes que passeiam sozinhas são só CSS. Sem mouse (toque), fica
+   só a luz ambiente. */
+(function () {
+  var cards = document.querySelectorAll('[data-glow]');
+  if (!cards.length) return;
+  cards.forEach(function (card) {
+    var tx = 50, ty = 50, x = 50, y = 50, raf = 0;
+
+    function pos(e) {
+      var r = card.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width) * 100;
+      ty = ((e.clientY - r.top) / r.height) * 100;
+    }
+    function apply() {
+      card.style.setProperty('--mx', x.toFixed(2) + '%');
+      card.style.setProperty('--my', y.toFixed(2) + '%');
+    }
+    function loop() {
+      x += (tx - x) * 0.14;
+      y += (ty - y) * 0.14;
+      apply();
+      raf = (Math.abs(tx - x) > 0.1 || Math.abs(ty - y) > 0.1) ? requestAnimationFrame(loop) : 0;
+    }
+
+    card.addEventListener('pointerenter', function (e) {
+      if (e.pointerType === 'touch') return;
+      pos(e); x = tx; y = ty; apply();
+      card.classList.add('is-hover');
+    });
+    card.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch') return;
+      pos(e);
+      if (!raf) raf = requestAnimationFrame(loop);
+    });
+    card.addEventListener('pointerleave', function () {
+      card.classList.remove('is-hover');
+    });
+  });
+})();
