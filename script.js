@@ -18,6 +18,7 @@
 
   items.forEach(function (it) {
     it.addEventListener('click', function () {
+      if (it.classList.contains('nav-dd-btn')) return; // só abre a lista de produtos
       items.forEach(function (i) { i.classList.remove('active'); });
       it.classList.add('active');
       moveLamp(it);
@@ -776,4 +777,27 @@ document.querySelectorAll('.faqlist details').forEach(function(d){
   window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }, { passive: true });
   window.addEventListener('resize', draw);
   draw();
+})();
+
+/* MENU "SOLUÇÕES" COM LISTA DE PRODUTOS (".nav-dd"): clicar na seta/palavra abre e fecha a lista; clicar fora,
+   escolher um item ou apertar Esc fecha. */
+(function () {
+  var dds = document.querySelectorAll('.nav-dd');
+  if (!dds.length) return;
+  dds.forEach(function (dd) {
+    var btn = dd.querySelector('.nav-dd-btn');
+    function set(open) {
+      dd.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      set(!dd.classList.contains('open'));
+    });
+    document.addEventListener('click', function (e) { if (!dd.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+    dd.querySelectorAll('.nav-menu a').forEach(function (a) {
+      a.addEventListener('click', function () { set(false); });
+    });
+  });
 })();
