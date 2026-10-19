@@ -623,3 +623,61 @@ document.querySelectorAll('.faqlist details').forEach(function(d){
     sync();
   }
 })();
+
+/* LINHA DO TEMPO HORIZONTAL (".tl") — recriação em JS puro do componente React (GSAP ScrollTrigger +
+   SplitText) que o usuário mandou. A seção ganha altura = o quanto a faixa precisa andar pro lado + 1 tela;
+   o palco fica fixo (sticky) e a rolagem vertical vira deslocamento horizontal. A linha cresce com a rolagem
+   e cada passo (haste, ponto, texto em máscara) é "scrubado" conforme chega na tela. Roda mesmo com
+   "reduzir movimento" ligado: é controlado pelo dedo, não é animação automática. */
+(function () {
+  var secs = document.querySelectorAll('.tl');
+  if (!secs.length) return;
+  var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+  var ease = function (t) { return 1 - Math.pow(1 - t, 2.2); };
+
+  secs.forEach(function (sec) {
+    var track = sec.querySelector('.tl-track');
+    var bar = sec.querySelector('.tl-bar');
+    var items = Array.prototype.map.call(sec.querySelectorAll('.tl-item'), function (el) {
+      return { el: el, stem: el.querySelector('.tl-stem'), dot: el.querySelector('.tl-dot'),
+               ins: el.querySelectorAll('.tl-in'), base: 0 };
+    });
+    var maxX = 0, ticking = false;
+
+    function measure() {
+      sec.classList.add('tl-on');
+      track.style.transform = 'none';
+      maxX = Math.max(0, track.offsetWidth - window.innerWidth);
+      sec.style.height = (maxX + window.innerHeight) + 'px';
+      items.forEach(function (it) { it.base = it.el.getBoundingClientRect().left; });
+      draw();
+    }
+
+    function draw() {
+      ticking = false;
+      var vw = window.innerWidth;
+      var total = sec.offsetHeight - window.innerHeight;
+      var p = total > 0 ? clamp(-sec.getBoundingClientRect().top / total) : 0;
+      var x = -p * maxX;
+      track.style.transform = 'translate3d(' + x + 'px,0,0)';
+      bar.style.width = (clamp(p / 0.9) * 100) + '%';
+      items.forEach(function (it) {
+        var left = it.base + x;
+        var q = clamp((vw * 0.9 - left) / (vw * 0.34));
+        var a = clamp(q / 0.4), t = ease(clamp((q - 0.2) / 0.8));
+        it.stem.style.transform = 'scaleY(' + a + ')';
+        it.dot.style.transform = 'translate(-50%,0) scale(' + a + ')';
+        for (var i = 0; i < it.ins.length; i++) {
+          it.ins[i].style.transform = 'translateY(' + ((1 - t) * 110) + '%)';
+        }
+      });
+    }
+
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measure);
+    window.addEventListener('load', measure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    measure();
+  });
+})();
