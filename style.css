@@ -898,6 +898,7 @@ a{color:inherit;text-decoration:none}
 .ph-chip{position:absolute;display:block;transform:translate(-50%,-50%)}
 .ph-ic{display:flex;align-items:center;justify-content:center;width:2.6rem;height:2.6rem;border-radius:50%;background:var(--carbon);border:1px solid var(--line);box-shadow:0 4px 12px rgba(0,0,0,.4);color:var(--sky);animation:ph-spin 12s linear infinite reverse}
 .ph-ic svg{width:1.2rem;height:1.2rem}
+.ph-ic.ph-brand{background:var(--b);border-color:transparent;color:#fff}
 @keyframes ph-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @media (max-width:900px){.ph-card{padding-left:28px}}
 @media (max-width:700px){
