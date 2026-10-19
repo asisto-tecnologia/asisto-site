@@ -865,3 +865,8 @@ a{color:inherit;text-decoration:none}
 .nf-sub{margin:16px auto 0;max-width:46ch;font-size:17px;color:var(--muted)}
 .nf-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:32px}
 @media (max-width:700px){.nf{padding-block:56px 40px}.nf-code{font-size:72px}.nf-title{font-size:30px}}
+
+/* mobile: com 6 selos (inclui Atende), 3 por linha em vez de 5 + 1 sozinho */
+@media (max-width:700px){
+  .hero .badges{display:grid;grid-template-columns:repeat(3,max-content);gap:8px 10px}
+}
