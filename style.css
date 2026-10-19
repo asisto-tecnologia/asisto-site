@@ -894,7 +894,7 @@ a{color:inherit;text-decoration:none}
    Cada produto define --pg (gradiente oficial) e --pa (cor de destaque) no body: body.pp-<produto> */
 /* paleta do produto: --pc1/--pc2 = degradê dos botões; --pcd = texto escuro sobre o botão */
 .pp-flow{--pg:linear-gradient(135deg,#0b2a28,#2fd3b0 55%,#7ee08a);--pa:#7ee08a;--pc1:#2fd3b0;--pc2:#7ee08a;--pcd:#062b24}
-.pp-voice{--pg:linear-gradient(135deg,#2a1020,#6f63a8 42%,#ff7a59);--pa:#ff8a63;--pc1:#ff9a72;--pc2:#ff6b4a;--pcd:#2b0f08}
+.pp-voice{--pg:linear-gradient(135deg,#2a1020,#6f63a8 42%,#ff7a59);--pa:#ff8a63;--pc1:#ff9a72;--pc2:#ff6b4a;--pcd:#2b0f08;--lgA:rgba(255,205,170,.55);--lgB:rgba(255,107,74,.55);--lgS1:rgba(255,236,226,.42);--lgS2:rgba(255,150,120,.16);--lgR:rgba(255,210,190,.45)}
 .pp-h2 .accent{color:var(--sky);font-style:italic;font-weight:300}
 .btn-pg{background:linear-gradient(135deg,var(--pc1),var(--pc2));color:var(--pcd);font-weight:800;box-shadow:0 10px 26px -12px var(--pc2);transition:filter .2s ease,transform .2s ease,box-shadow .2s ease}
 .btn-pg:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 14px 30px -12px var(--pc2)}
@@ -991,10 +991,10 @@ a{color:inherit;text-decoration:none}
 .tl-lead img{position:relative;width:62%;height:auto;filter:drop-shadow(0 4px 14px rgba(0,0,0,.6))}
 /* cartão com luz: duas luzes que passeiam sozinhas + foco que segue o mouse (data-glow, ver script.js) */
 .tl-lead .gl-a,.tl-lead .gl-b,.tl-lead .gl-spot,.tl-lead .gl-rim{position:absolute;display:block;pointer-events:none}
-.tl-lead .gl-a{width:78%;height:70%;left:-14%;top:-16%;border-radius:50%;background:radial-gradient(circle,rgba(190,255,215,.6),transparent 66%);filter:blur(16px);animation:gl-a 9s ease-in-out infinite alternate}
-.tl-lead .gl-b{width:66%;height:62%;right:-18%;bottom:-14%;border-radius:50%;background:radial-gradient(circle,rgba(0,210,255,.5),transparent 66%);filter:blur(18px);animation:gl-b 12s ease-in-out infinite alternate}
-.tl-lead .gl-spot{inset:0;opacity:0;transition:opacity .4s ease;mix-blend-mode:screen;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(225,255,238,.42),rgba(120,255,200,.14) 42%,transparent 72%)}
-.tl-lead .gl-rim{inset:0;border-radius:inherit;padding:1px;opacity:0;transition:opacity .4s ease;background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.95),rgba(190,255,225,.4) 45%,transparent 75%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.tl-lead .gl-a{width:78%;height:70%;left:-14%;top:-16%;border-radius:50%;background:radial-gradient(circle,var(--lgA,rgba(190,255,215,.6)),transparent 66%);filter:blur(16px);animation:gl-a 9s ease-in-out infinite alternate}
+.tl-lead .gl-b{width:66%;height:62%;right:-18%;bottom:-14%;border-radius:50%;background:radial-gradient(circle,var(--lgB,rgba(0,210,255,.5)),transparent 66%);filter:blur(18px);animation:gl-b 12s ease-in-out infinite alternate}
+.tl-lead .gl-spot{inset:0;opacity:0;transition:opacity .4s ease;mix-blend-mode:screen;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),var(--lgS1,rgba(225,255,238,.42)),var(--lgS2,rgba(120,255,200,.14)) 42%,transparent 72%)}
+.tl-lead .gl-rim{inset:0;border-radius:inherit;padding:1px;opacity:0;transition:opacity .4s ease;background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.95),var(--lgR,rgba(190,255,225,.4)) 45%,transparent 75%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
 .tl-lead.is-hover .gl-spot,.tl-lead.is-hover .gl-rim{opacity:1}
 @keyframes gl-a{0%{transform:translate(0,0) scale(1)}50%{transform:translate(38%,24%) scale(1.18)}100%{transform:translate(14%,52%) scale(.92)}}
 @keyframes gl-b{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-36%,-26%) scale(1.15)}100%{transform:translate(-12%,-54%) scale(.95)}}
@@ -1070,6 +1070,9 @@ a{color:inherit;text-decoration:none}
 .pp main .ph-ic:not(.ph-brand){border-color:var(--gline)}
 .pp main .post-cta{background:linear-gradient(135deg,var(--gglow2),var(--panel) 62%)}
 .pp-sub.pp-center{max-width:780px;margin-inline:auto}
+/* card ilustrativo ao lado do texto (reaproveita o card com luz do .tl-lead; aparece também no celular) */
+.tl-lead.pp-vcard{display:flex;flex:none;width:100%;height:auto;min-height:0;aspect-ratio:4/3;border-radius:22px}
+.tl-lead.pp-vcard img{width:54%}
 .pp-proof{display:flex;align-items:center;justify-content:center;gap:30px;flex-wrap:wrap;max-width:720px;margin:40px auto 0;padding:28px 36px;border:1px solid var(--line);border-radius:22px;background:var(--panel);text-align:left}
 .pp-proof img{height:58px;width:auto}
 .pp-proof b{display:block;font-size:36px;line-height:1;color:var(--white)}

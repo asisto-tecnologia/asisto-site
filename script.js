@@ -732,7 +732,7 @@ document.querySelectorAll('.faqlist details').forEach(function(d){
 
   var sel = [
     '.pp-sec .blog-eyebrow', '.pp-sec .pp-h2', '.pp-sec .pp-sub', '.pp-sec .pp-note', '.pp-sec .md-item',
-    '.pp-sec .pp-card', '.pp-sec .pp-plan', '.pp-sec .pp-shot', '.pp-sec .pp-proof', '.pp-sec .pp-list li', '.pp-sec .post-cta',
+    '.pp-sec .pp-card', '.pp-sec .pp-plan', '.pp-sec .pp-shot', '.pp-sec .pp-proof', '.pp-sec .tl-lead', '.pp-sec .pp-list li', '.pp-sec .post-cta',
     '.ph-copy > *', '.ph-orbits'
   ].join(',');
   var els = Array.prototype.slice.call(document.querySelectorAll(sel));
