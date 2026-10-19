@@ -894,12 +894,13 @@ a{color:inherit;text-decoration:none}
    Cada produto define --pg (gradiente oficial) e --pa (cor de destaque) no body: body.pp-<produto> */
 /* paleta do produto: --pc1/--pc2 = degradê dos botões; --pcd = texto escuro sobre o botão */
 .pp-flow{--pg:linear-gradient(135deg,#0b2a28,#2fd3b0 55%,#7ee08a);--pa:#7ee08a;--pc1:#2fd3b0;--pc2:#7ee08a;--pcd:#062b24}
+.pp-voice{--pg:linear-gradient(135deg,#2a1020,#6f63a8 42%,#ff7a59);--pa:#ff8a63;--pc1:#ff9a72;--pc2:#ff6b4a;--pcd:#2b0f08}
 .pp-h2 .accent{color:var(--sky);font-style:italic;font-weight:300}
 .btn-pg{background:linear-gradient(135deg,var(--pc1),var(--pc2));color:var(--pcd);font-weight:800;box-shadow:0 10px 26px -12px var(--pc2);transition:filter .2s ease,transform .2s ease,box-shadow .2s ease}
 .btn-pg:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 14px 30px -12px var(--pc2)}
 .btn-pg:active{transform:translateY(0)}
 .btn-pg-outline{border:1px solid var(--pc1);color:var(--pc2);font-weight:800;transition:background .2s ease,color .2s ease,border-color .2s ease}
-.btn-pg-outline:hover{background:rgba(47,211,176,.12);border-color:var(--pc2);color:var(--white)}
+.btn-pg-outline:hover{background:var(--gfill,rgba(47,211,176,.12));border-color:var(--pc2);color:var(--white)}
 /* hero com órbitas — recriação em CSS puro do componente React (FeatureSection, ruixen) que o usuário mandou:
    card com texto à esquerda e 3 órbitas pontilhadas girando à direita, cortadas na borda do card.
    Os ícones são provisórios (a lista fica no gerador da página). */
@@ -955,6 +956,9 @@ a{color:inherit;text-decoration:none}
 .pp-ic svg{width:22px;height:22px}
 .pp-card p{margin:14px 0 0;font-size:16px;font-weight:700;line-height:1.4;color:var(--white)}
 .pp-card-sm p{margin:0}
+.pp-grid-lists .pp-list{margin-top:16px;gap:9px}
+.pp-grid-lists .pp-list li{font-size:15px;line-height:1.45}
+.pp-grid-lists .pp-card h3{margin-top:16px}
 .pp-flexc{display:flex;flex-wrap:wrap;justify-content:center}
 .pp-flexc>.pp-card{flex:0 0 calc((100% - 40px)/3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
 .pp-plan{padding:28px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(160deg,var(--c1),var(--panel) 70%)}
@@ -1052,18 +1056,24 @@ a{color:inherit;text-decoration:none}
 .pp .tl-lead:hover{transform:scale(1.03)}
 .pp-progress{position:fixed;left:0;top:0;right:0;height:3px;z-index:60;pointer-events:none}
 .pp-progress i{display:block;height:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--pc1,#0097ff),var(--pc2,#6fcbff))}
-/* tema verde do Flow: no conteúdo (main) o azul da marca vira verde da paleta do produto; o menu e o rodapé
-   seguem o padrão do site. --gline = contorno em verde mais escuro; --gline-h = contorno no hover. */
-.pp-flow main{--sky:#7ee08a;--azure:#2fd3b0;--gline:rgba(47,211,176,.30);--gline-h:rgba(126,224,138,.62);--gfill:rgba(47,211,176,.12);--gedge:rgba(47,211,176,.40)}
-.pp-flow main .blog-eyebrow span{border-color:var(--gedge);background:var(--gfill);color:var(--sky)}
-.pp-flow main .md-item,.pp-flow main .pp-card,.pp-flow main .pp-plan,.pp-flow main .pp-shot,.pp-flow main .post-cta,.pp-flow main .ph-card,.pp-flow main .tl-lead{border-color:var(--gline)}
-.pp-flow main .md-item:hover,.pp-flow main .pp-card:hover,.pp-flow main .pp-plan:hover{border-color:var(--gline-h)}
-.pp-flow main .md-ic,.pp-flow main .pp-ic{border-color:var(--gedge);background:var(--gfill);color:var(--sky)}
-.pp-flow main .tl-chips span{border-color:var(--gline)}
-.pp-flow main .ph-card{background:radial-gradient(560px 340px at 92% 55%,rgba(47,211,176,.13),transparent 70%),var(--panel)}
-.pp-flow main .ph-orbit{border-color:rgba(47,211,176,.30)}
-.pp-flow main .ph-ic:not(.ph-brand){border-color:var(--gline)}
-.pp-flow main .post-cta{background:linear-gradient(135deg,rgba(47,211,176,.09),var(--panel) 62%)}
+/* tema por produto: no conteúdo (main) o azul da marca vira a cor do produto; o menu e o rodapé seguem o padrão do site.
+   --gline = contorno escuro; --gline-h = contorno no hover; --gfill/--gedge = fundo/borda dos ícones; --gglow = brilho do hero. */
+.pp-flow main{--sky:#7ee08a;--azure:#2fd3b0;--gline:rgba(47,211,176,.30);--gline-h:rgba(126,224,138,.62);--gfill:rgba(47,211,176,.12);--gedge:rgba(47,211,176,.40);--gglow:rgba(47,211,176,.13);--gglow2:rgba(47,211,176,.09);--gorbit:rgba(47,211,176,.30)}
+.pp-voice main{--sky:#ff9a7a;--azure:#ff6b4a;--gline:rgba(255,107,74,.30);--gline-h:rgba(255,138,99,.62);--gfill:rgba(255,107,74,.12);--gedge:rgba(255,107,74,.40);--gglow:rgba(255,107,74,.13);--gglow2:rgba(255,107,74,.09);--gorbit:rgba(255,107,74,.30)}
+.pp main .blog-eyebrow span{border-color:var(--gedge);background:var(--gfill);color:var(--sky)}
+.pp main .md-item,.pp main .pp-card,.pp main .pp-plan,.pp main .pp-shot,.pp main .post-cta,.pp main .ph-card,.pp main .tl-lead,.pp main .pp-proof{border-color:var(--gline)}
+.pp main .md-item:hover,.pp main .pp-card:hover,.pp main .pp-plan:hover{border-color:var(--gline-h)}
+.pp main .md-ic,.pp main .pp-ic{border-color:var(--gedge);background:var(--gfill);color:var(--sky)}
+.pp main .tl-chips span{border-color:var(--gline)}
+.pp main .ph-card{background:radial-gradient(560px 340px at 92% 55%,var(--gglow),transparent 70%),var(--panel)}
+.pp main .ph-orbit{border-color:var(--gorbit)}
+.pp main .ph-ic:not(.ph-brand){border-color:var(--gline)}
+.pp main .post-cta{background:linear-gradient(135deg,var(--gglow2),var(--panel) 62%)}
+.pp-sub.pp-center{max-width:780px;margin-inline:auto}
+.pp-proof{display:flex;align-items:center;justify-content:center;gap:30px;flex-wrap:wrap;max-width:720px;margin:40px auto 0;padding:28px 36px;border:1px solid var(--line);border-radius:22px;background:var(--panel);text-align:left}
+.pp-proof img{height:58px;width:auto}
+.pp-proof b{display:block;font-size:36px;line-height:1;color:var(--white)}
+.pp-proof span{display:block;margin-top:8px;font-size:14px;line-height:1.4;color:var(--muted)}
 @media (max-width:900px){
   .pp-grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
