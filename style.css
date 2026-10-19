@@ -879,8 +879,14 @@ a{color:inherit;text-decoration:none}
 
 /* ---- páginas de produto (/produtos/<nome>/) ----
    Cada produto define --pg (gradiente oficial) e --pa (cor de destaque) no body: body.pp-<produto> */
-.pp-flow{--pg:linear-gradient(135deg,#0b2a28,#2fd3b0 55%,#7ee08a);--pa:#7ee08a}
+/* paleta do produto: --pc1/--pc2 = degradê dos botões; --pcd = texto escuro sobre o botão */
+.pp-flow{--pg:linear-gradient(135deg,#0b2a28,#2fd3b0 55%,#7ee08a);--pa:#7ee08a;--pc1:#2fd3b0;--pc2:#7ee08a;--pcd:#062b24}
 .pp-h2 .accent{color:var(--sky);font-style:italic;font-weight:300}
+.btn-pg{background:linear-gradient(135deg,var(--pc1),var(--pc2));color:var(--pcd);font-weight:800;box-shadow:0 10px 26px -12px var(--pc2);transition:filter .2s ease,transform .2s ease,box-shadow .2s ease}
+.btn-pg:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 14px 30px -12px var(--pc2)}
+.btn-pg:active{transform:translateY(0)}
+.btn-pg-outline{border:1px solid var(--pc1);color:var(--pc2);font-weight:800;transition:background .2s ease,color .2s ease,border-color .2s ease}
+.btn-pg-outline:hover{background:rgba(47,211,176,.12);border-color:var(--pc2);color:var(--white)}
 /* hero com órbitas — recriação em CSS puro do componente React (FeatureSection, ruixen) que o usuário mandou:
    card com texto à esquerda e 3 órbitas pontilhadas girando à direita, cortadas na borda do card.
    Os ícones são provisórios (a lista fica no gerador da página). */
