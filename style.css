@@ -936,6 +936,8 @@ a{color:inherit;text-decoration:none}
 .pp-ic svg{width:22px;height:22px}
 .pp-card p{margin:14px 0 0;font-size:16px;font-weight:700;line-height:1.4;color:var(--white)}
 .pp-card-sm p{margin:0}
+.pp-flexc{display:flex;flex-wrap:wrap;justify-content:center}
+.pp-flexc>.pp-card{flex:0 0 calc((100% - 40px)/3);display:flex;align-items:center;justify-content:center;text-align:center}
 .pp-plan{padding:28px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(160deg,var(--c1),var(--panel) 70%)}
 .pp-plan h3{position:relative;font-size:26px;letter-spacing:.02em}
 .pp-plan h3:after{content:"";position:absolute;right:0;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--c2)}
@@ -1027,5 +1029,6 @@ a{color:inherit;text-decoration:none}
   .pp-grid,.pp-grid-3,.pp-grid-4{grid-template-columns:minmax(0,1fr);gap:14px;margin-top:28px}
   .pp-card{padding:20px}
   .pp-card-sm{padding:16px 20px}
+  .pp-flexc>.pp-card{flex:0 0 100%}
   .pp-plan{padding:24px 20px}
 }
