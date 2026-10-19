@@ -920,7 +920,8 @@ a{color:inherit;text-decoration:none}
 .pp-note{margin:24px 0 0;font-size:18px;font-weight:800;line-height:1.4;color:var(--white);text-align:left}
 .pp-split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;text-align:left}
 .pp-split>*{min-width:0}
-.pp-one{grid-template-columns:minmax(0,760px);justify-content:center}
+.pp-note.pp-center{text-align:center;margin-top:28px}
+.pp-chipsrow{margin-top:34px}
 .pp-list{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px;text-align:left}
 .pp-list li{position:relative;padding-left:24px;font-size:17px;line-height:1.5;color:var(--ink)}
 .pp-list li:before{content:"";position:absolute;left:0;top:.6em;width:9px;height:9px;border-radius:50%;background:var(--pa,var(--sky))}
