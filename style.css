@@ -943,15 +943,16 @@ a{color:inherit;text-decoration:none}
 .pp-card p{margin:14px 0 0;font-size:16px;font-weight:700;line-height:1.4;color:var(--white)}
 .pp-card-sm p{margin:0}
 .pp-flexc{display:flex;flex-wrap:wrap;justify-content:center}
-.pp-flexc>.pp-card{flex:0 0 calc((100% - 40px)/3);display:flex;align-items:center;justify-content:center;text-align:center}
+.pp-flexc>.pp-card{flex:0 0 calc((100% - 40px)/3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
 .pp-plan{padding:28px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(160deg,var(--c1),var(--panel) 70%)}
+.pp-plan .pp-ic{margin-bottom:16px}
 .pp-plan h3{position:relative;font-size:26px;letter-spacing:.02em}
 .pp-plan h3:after{content:"";position:absolute;right:0;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--c2)}
 .pp-plan-sub{margin:12px 0 0;font-size:15px;line-height:1.5;color:var(--ink)}
 .pp-plan .pp-list{margin-top:20px;gap:10px}
 .pp-plan .pp-list li{font-size:15px}
 .pp-plan .pp-list li:before{background:var(--c2)}
-.pp-plan-start{--c1:#0b2a4a;--c2:#0097ff}
+.pp-plan-start{--c1:#0b2f2b;--c2:#1d9c7a}
 .pp-plan-pro{--c1:#0b3333;--c2:#4fc3b8}
 .pp-plan-prime{--c1:#22301a;--c2:#7ee08a}
 .pp-sec .post-cta{margin-top:0;text-align:left}
@@ -1034,6 +1035,18 @@ a{color:inherit;text-decoration:none}
 .pp .tl-lead:hover{transform:scale(1.03)}
 .pp-progress{position:fixed;left:0;top:0;right:0;height:3px;z-index:60;pointer-events:none}
 .pp-progress i{display:block;height:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--pc1,#0097ff),var(--pc2,#6fcbff))}
+/* tema verde do Flow: no conteúdo (main) o azul da marca vira verde da paleta do produto; o menu e o rodapé
+   seguem o padrão do site. --gline = contorno em verde mais escuro; --gline-h = contorno no hover. */
+.pp-flow main{--sky:#7ee08a;--azure:#2fd3b0;--gline:rgba(47,211,176,.30);--gline-h:rgba(126,224,138,.62);--gfill:rgba(47,211,176,.12);--gedge:rgba(47,211,176,.40)}
+.pp-flow main .blog-eyebrow span{border-color:var(--gedge);background:var(--gfill);color:var(--sky)}
+.pp-flow main .md-item,.pp-flow main .pp-card,.pp-flow main .pp-plan,.pp-flow main .pp-shot,.pp-flow main .post-cta,.pp-flow main .ph-card,.pp-flow main .tl-lead{border-color:var(--gline)}
+.pp-flow main .md-item:hover,.pp-flow main .pp-card:hover,.pp-flow main .pp-plan:hover{border-color:var(--gline-h)}
+.pp-flow main .md-ic,.pp-flow main .pp-ic{border-color:var(--gedge);background:var(--gfill);color:var(--sky)}
+.pp-flow main .tl-chips span{border-color:var(--gline)}
+.pp-flow main .ph-card{background:radial-gradient(560px 340px at 92% 55%,rgba(47,211,176,.13),transparent 70%),var(--panel)}
+.pp-flow main .ph-orbit{border-color:rgba(47,211,176,.30)}
+.pp-flow main .ph-ic:not(.ph-brand){border-color:var(--gline)}
+.pp-flow main .post-cta{background:linear-gradient(135deg,rgba(47,211,176,.09),var(--panel) 62%)}
 @media (max-width:900px){
   .pp-grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
