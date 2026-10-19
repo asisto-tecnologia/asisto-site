@@ -895,6 +895,7 @@ a{color:inherit;text-decoration:none}
 /* paleta do produto: --pc1/--pc2 = degradê dos botões; --pcd = texto escuro sobre o botão */
 .pp-flow{--pg:linear-gradient(135deg,#0b2a28,#2fd3b0 55%,#7ee08a);--pa:#7ee08a;--pc1:#2fd3b0;--pc2:#7ee08a;--pcd:#062b24}
 .pp-voice{--pg:linear-gradient(135deg,#2a1020,#6f63a8 42%,#ff7a59);--pa:#ff8a63;--pc1:#ff9a72;--pc2:#ff6b4a;--pcd:#2b0f08;--lgA:rgba(255,205,170,.55);--lgB:rgba(255,107,74,.55);--lgS1:rgba(255,236,226,.42);--lgS2:rgba(255,150,120,.16);--lgR:rgba(255,210,190,.45)}
+.pp-erp{--pg:linear-gradient(135deg,#0b1a2e,#4144d4 55%,#7109b6);--pa:#9a9cf5;--pc1:#7578f5;--pc2:#4144d4;--pcd:#ffffff;--lgA:rgba(170,172,255,.55);--lgB:rgba(113,9,182,.55);--lgS1:rgba(230,231,255,.42);--lgS2:rgba(140,142,250,.16);--lgR:rgba(200,202,255,.45)}
 .pp-h2 .accent{color:var(--sky);font-style:italic;font-weight:300}
 .btn-pg{background:linear-gradient(135deg,var(--pc1),var(--pc2));color:var(--pcd);font-weight:800;box-shadow:0 10px 26px -12px var(--pc2);transition:filter .2s ease,transform .2s ease,box-shadow .2s ease}
 .btn-pg:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 14px 30px -12px var(--pc2)}
@@ -1060,6 +1061,7 @@ a{color:inherit;text-decoration:none}
    --gline = contorno escuro; --gline-h = contorno no hover; --gfill/--gedge = fundo/borda dos ícones; --gglow = brilho do hero. */
 .pp-flow main{--sky:#7ee08a;--azure:#2fd3b0;--gline:rgba(47,211,176,.30);--gline-h:rgba(126,224,138,.62);--gfill:rgba(47,211,176,.12);--gedge:rgba(47,211,176,.40);--gglow:rgba(47,211,176,.13);--gglow2:rgba(47,211,176,.09);--gorbit:rgba(47,211,176,.30)}
 .pp-voice main{--sky:#ff9a7a;--azure:#ff6b4a;--gline:rgba(255,107,74,.30);--gline-h:rgba(255,138,99,.62);--gfill:rgba(255,107,74,.12);--gedge:rgba(255,107,74,.40);--gglow:rgba(255,107,74,.13);--gglow2:rgba(255,107,74,.09);--gorbit:rgba(255,107,74,.30)}
+.pp-erp main{--sky:#a9abf7;--azure:#7578f5;--gline:rgba(117,120,245,.32);--gline-h:rgba(169,171,247,.65);--gfill:rgba(117,120,245,.14);--gedge:rgba(117,120,245,.42);--gglow:rgba(117,120,245,.15);--gglow2:rgba(117,120,245,.10);--gorbit:rgba(117,120,245,.32)}
 .pp main .blog-eyebrow span{border-color:var(--gedge);background:var(--gfill);color:var(--sky)}
 .pp main .md-item,.pp main .pp-card,.pp main .pp-plan,.pp main .pp-shot,.pp main .post-cta,.pp main .ph-card,.pp main .tl-lead,.pp main .pp-proof{border-color:var(--gline)}
 .pp main .md-item:hover,.pp main .pp-card:hover,.pp main .pp-plan:hover{border-color:var(--gline-h)}
@@ -1070,6 +1072,24 @@ a{color:inherit;text-decoration:none}
 .pp main .ph-ic:not(.ph-brand){border-color:var(--gline)}
 .pp main .post-cta{background:linear-gradient(135deg,var(--gglow2),var(--panel) 62%)}
 .pp-sub.pp-center{max-width:780px;margin-inline:auto}
+/* páginas com abas por vertente (ERP): painéis, fluxo em passos, destaque e números */
+.pp-card-d h3{margin-top:0;font-size:18px;line-height:1.3}
+.pp-card-d p{margin:10px 0 0;font-size:15px;font-weight:400;line-height:1.55;color:var(--muted)}
+.erp-panel{display:block;text-align:center}
+.erp-panel[hidden]{display:none}
+.erp-h{margin:0 auto;max-width:820px;font-size:28px;line-height:1.25}
+.erp-label{margin:44px 0 0;font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.erp-panel .pp-grid{margin-top:20px}
+.erp-flow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-top:20px}
+.erp-step{padding:10px 20px;border:1px solid var(--gline);border-radius:999px;background:var(--panel);font-size:15px;font-weight:800;color:var(--white)}
+.erp-arr{display:flex;color:var(--sky)}
+.erp-arr svg{width:18px;height:18px}
+.pp-callout{max-width:780px;margin:40px auto 0;padding:22px 28px;border:1px solid var(--gline);border-radius:18px;background:var(--gfill);font-size:17px;font-weight:800;line-height:1.5;color:var(--white)}
+.pp-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-top:32px}
+.pp-stat{min-width:210px;padding:24px 30px;border:1px solid var(--gline);border-radius:20px;background:var(--panel)}
+.pp-stat b{display:block;font-size:40px;line-height:1;font-weight:900;color:var(--white)}
+.pp-stat span{display:block;margin-top:8px;font-size:14px;color:var(--muted)}
+.pp-fine{margin:16px 0 0;font-size:13px;color:var(--muted)}
 /* Voice: selo VOICE no círculo central. O círculo continua metade para fora do card (layout original); o selo
    tem a mesma largura (3,2 rem) e o mesmo posicionamento (centralizado no círculo) que o símbolo da Asisto tinha no Flow. */
 .pp main .ph-core{border-color:var(--gedge)}
@@ -1096,6 +1116,11 @@ a{color:inherit;text-decoration:none}
   .pp-grid,.pp-grid-3,.pp-grid-4{grid-template-columns:minmax(0,1fr);gap:14px;margin-top:28px}
   .pp-card{padding:20px}
   .pp-card-sm{padding:16px 20px}
+  .erp-h{font-size:22px}
+  .erp-label{margin-top:32px}
+  .erp-step{padding:9px 16px;font-size:14px}
+  .pp-callout{padding:18px 20px;font-size:16px}
+  .pp-stat{min-width:0;width:100%;padding:20px 24px}
   .pp-flexc>.pp-card{flex:0 0 100%}
   .pp-plan{padding:24px 20px}
 }
