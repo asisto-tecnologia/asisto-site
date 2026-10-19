@@ -722,3 +722,58 @@ document.querySelectorAll('.faqlist details').forEach(function(d){
     });
   });
 })();
+
+/* REVEAL (páginas de produto, body.pp): títulos, cards e blocos surgem com fade + subida quando entram na tela,
+   em sequência dentro de cada grupo (efeito "cascata"), e uma barra fina no topo mostra o progresso da rolagem.
+   Roda mesmo com "reduzir movimento" ligado (é guiado pela rolagem do usuário). Sem JS, tudo aparece normal. */
+(function () {
+  if (!document.body.classList.contains('pp')) return;
+
+  var sel = [
+    '.pp-sec .blog-eyebrow', '.pp-sec .pp-h2', '.pp-sec .pp-sub', '.pp-sec .pp-note', '.pp-sec .md-item',
+    '.pp-sec .pp-card', '.pp-sec .pp-plan', '.pp-sec .pp-shot', '.pp-sec .pp-list li', '.pp-sec .post-cta',
+    '.ph-copy > *', '.ph-orbits'
+  ].join(',');
+  var els = Array.prototype.slice.call(document.querySelectorAll(sel));
+
+  // atraso em cascata: posição do item entre os irmãos de mesmo tipo (até 6 passos de 80 ms)
+  els.forEach(function (el) {
+    var sibs = Array.prototype.filter.call(el.parentNode.children, function (s) { return s.classList[0] === el.classList[0]; });
+    var i = Math.min(sibs.indexOf(el), 6);
+    el.style.setProperty('--d', (i * 0.08).toFixed(2) + 's');
+    el.classList.add('rv');
+  });
+
+  function show(el) {
+    el.classList.add('in');
+    var delay = parseFloat(el.style.getPropertyValue('--d')) || 0;
+    // depois de revelado, volta a transição curta pra o zoom do hover responder rápido
+    setTimeout(function () { el.classList.add('rv-done'); }, (0.7 + delay) * 1000 + 60);
+  }
+
+  if (!('IntersectionObserver' in window)) { els.forEach(show); }
+  else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    els.forEach(function (el) { io.observe(el); });
+  }
+
+  // barra de progresso da página
+  var bar = document.createElement('div');
+  bar.className = 'pp-progress';
+  bar.innerHTML = '<i></i>';
+  document.body.appendChild(bar);
+  var fill = bar.firstChild, ticking = false;
+  function draw() {
+    ticking = false;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? Math.min(1, Math.max(0, window.scrollY / h)) : 0;
+    fill.style.transform = 'scaleX(' + p + ')';
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }, { passive: true });
+  window.addEventListener('resize', draw);
+  draw();
+})();

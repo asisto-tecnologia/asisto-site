@@ -1023,6 +1023,17 @@ a{color:inherit;text-decoration:none}
   .tl-txt h4{font-size:11vw}
   .tl-txt p{margin-top:2vw;font-size:4.8vw}
 }
+/* efeito de rolagem nas páginas de produto: itens surgem (fade + subida) ao entrar na tela, em sequência nos
+   grupos; barra de progresso no topo. Zoom suave nos cards ao passar o mouse. Ver script.js ("REVEAL"). */
+.pp .pp-card,.pp .pp-plan,.pp .md-item,.pp .pp-shot,.pp .tl-lead{transition:transform .3s cubic-bezier(.2,.7,.2,1),border-color .3s ease,box-shadow .3s ease}
+.pp .rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease var(--d,0s),transform .7s cubic-bezier(.2,.7,.2,1) var(--d,0s),border-color .3s ease,box-shadow .3s ease}
+.pp .rv.in{opacity:1;transform:none}
+.pp .rv.rv-done{transition:opacity .3s ease,transform .3s cubic-bezier(.2,.7,.2,1),border-color .3s ease,box-shadow .3s ease}
+.pp .pp-card:hover,.pp .pp-plan:hover,.pp .pp-shot:hover{transform:scale(1.04);box-shadow:0 18px 40px -18px rgba(0,0,0,.75);position:relative;z-index:2}
+.pp .md-item:hover{transform:scale(1.06);box-shadow:0 14px 30px -16px rgba(0,0,0,.75);position:relative;z-index:2}
+.pp .tl-lead:hover{transform:scale(1.03)}
+.pp-progress{position:fixed;left:0;top:0;right:0;height:3px;z-index:60;pointer-events:none}
+.pp-progress i{display:block;height:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--pc1,#0097ff),var(--pc2,#6fcbff))}
 @media (max-width:900px){
   .pp-grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
