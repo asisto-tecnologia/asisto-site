@@ -1070,11 +1070,11 @@ a{color:inherit;text-decoration:none}
 .pp main .ph-ic:not(.ph-brand){border-color:var(--gline)}
 .pp main .post-cta{background:linear-gradient(135deg,var(--gglow2),var(--panel) 62%)}
 .pp-sub.pp-center{max-width:780px;margin-inline:auto}
-/* Voice: o selo VOICE no centro é largo; o centro das órbitas sai da borda do card pra ele aparecer inteiro */
-.pp-voice .ph-center{left:calc(100% - 3.6rem)}
+/* Voice: selo VOICE no círculo central. O círculo continua metade para fora do card (layout original); o selo é
+   reduzido e deslocado para o centro da metade visível (esquerda no desktop; de cima no celular). */
 .pp-voice .ph-core{border-color:var(--gedge)}
-.ph-core-pill img{width:4.8rem;height:auto}
-@media (max-width:700px){.pp-voice .ph-center{left:50%;top:calc(100% - 3.6rem)}}
+.ph-core-pill img{width:2.8rem;height:auto;margin:0 3rem 0 0}
+@media (max-width:700px){.ph-core-pill img{margin:0 0 3rem 0}}
 /* card ilustrativo ao lado do texto (reaproveita o card com luz do .tl-lead; aparece também no celular) */
 .tl-lead.pp-vcard{display:flex;flex:none;width:100%;height:auto;min-height:0;aspect-ratio:4/3;border-radius:22px}
 .tl-lead.pp-vcard img{width:54%}
