@@ -1075,6 +1075,9 @@ a{color:inherit;text-decoration:none}
 .tl-lead.pp-vcard img{width:54%}
 .pp-proof{display:flex;align-items:center;justify-content:center;gap:30px;flex-wrap:wrap;max-width:720px;margin:40px auto 0;padding:28px 36px;border:1px solid var(--line);border-radius:22px;background:var(--panel);text-align:left}
 .pp-proof img{height:58px;width:auto}
+.pp-proof-logo{display:block;flex:none;opacity:.9;transition:opacity .25s ease,transform .25s ease}
+.pp-proof-logo:hover{opacity:1;transform:scale(1.06)}
+.pp-proof-logo:focus-visible{outline:2px solid var(--gedge,var(--sky));outline-offset:6px;border-radius:8px}
 .pp-proof b{display:block;font-size:36px;line-height:1;color:var(--white)}
 .pp-proof span{display:block;margin-top:8px;font-size:14px;line-height:1.4;color:var(--muted)}
 @media (max-width:900px){
