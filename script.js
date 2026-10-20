@@ -18,6 +18,7 @@
 
   items.forEach(function (it) {
     it.addEventListener('click', function () {
+      if (it.classList.contains('nav-dd-btn')) return; // só abre a lista de produtos
       items.forEach(function (i) { i.classList.remove('active'); });
       it.classList.add('active');
       moveLamp(it);
@@ -622,4 +623,181 @@ document.querySelectorAll('.faqlist details').forEach(function(d){
     window.addEventListener('resize', sync);
     sync();
   }
+})();
+
+/* LINHA DO TEMPO HORIZONTAL (".tl") — recriação em JS puro do componente React (GSAP ScrollTrigger +
+   SplitText) que o usuário mandou. A seção ganha altura = o quanto a faixa precisa andar pro lado + 1 tela;
+   o palco fica fixo (sticky) e a rolagem vertical vira deslocamento horizontal. A linha cresce com a rolagem
+   e cada passo (haste, ponto, texto em máscara) é "scrubado" conforme chega na tela. Roda mesmo com
+   "reduzir movimento" ligado: é controlado pelo dedo, não é animação automática. */
+(function () {
+  var secs = document.querySelectorAll('.tl');
+  if (!secs.length) return;
+  var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+  var ease = function (t) { return 1 - Math.pow(1 - t, 2.2); };
+
+  secs.forEach(function (sec) {
+    var track = sec.querySelector('.tl-track');
+    var bar = sec.querySelector('.tl-bar');
+    var items = Array.prototype.map.call(sec.querySelectorAll('.tl-item'), function (el) {
+      return { el: el, stem: el.querySelector('.tl-stem'), dot: el.querySelector('.tl-dot'),
+               ins: el.querySelectorAll('.tl-in'), base: 0 };
+    });
+    var maxX = 0, ticking = false;
+
+    function measure() {
+      sec.classList.add('tl-on');
+      track.style.transform = 'none';
+      maxX = Math.max(0, track.offsetWidth - window.innerWidth);
+      sec.style.height = (maxX + window.innerHeight) + 'px';
+      items.forEach(function (it) { it.base = it.el.getBoundingClientRect().left; });
+      draw();
+    }
+
+    function draw() {
+      ticking = false;
+      var vw = window.innerWidth;
+      var total = sec.offsetHeight - window.innerHeight;
+      var p = total > 0 ? clamp(-sec.getBoundingClientRect().top / total) : 0;
+      var x = -p * maxX;
+      track.style.transform = 'translate3d(' + x + 'px,0,0)';
+      bar.style.width = (clamp(p / 0.9) * 100) + '%';
+      items.forEach(function (it) {
+        var left = it.base + x;
+        var q = clamp((vw * 0.9 - left) / (vw * 0.34));
+        var a = clamp(q / 0.4), t = ease(clamp((q - 0.2) / 0.8));
+        it.stem.style.transform = 'scaleY(' + a + ')';
+        it.dot.style.transform = 'translate(-50%,0) scale(' + a + ')';
+        for (var i = 0; i < it.ins.length; i++) {
+          it.ins[i].style.transform = 'translateY(' + ((1 - t) * 110) + '%)';
+        }
+      });
+    }
+
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measure);
+    window.addEventListener('load', measure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    measure();
+  });
+})();
+
+/* CARTAO COM LUZ ([data-glow]): o foco de luz e o brilho da borda acompanham o mouse com suavidade (o ponto
+   "persegue" o cursor em vez de pular). As duas luzes que passeiam sozinhas são só CSS. Sem mouse (toque), fica
+   só a luz ambiente. */
+(function () {
+  var cards = document.querySelectorAll('[data-glow]');
+  if (!cards.length) return;
+  cards.forEach(function (card) {
+    var tx = 50, ty = 50, x = 50, y = 50, raf = 0;
+
+    function pos(e) {
+      var r = card.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width) * 100;
+      ty = ((e.clientY - r.top) / r.height) * 100;
+    }
+    function apply() {
+      card.style.setProperty('--mx', x.toFixed(2) + '%');
+      card.style.setProperty('--my', y.toFixed(2) + '%');
+    }
+    function loop() {
+      x += (tx - x) * 0.14;
+      y += (ty - y) * 0.14;
+      apply();
+      raf = (Math.abs(tx - x) > 0.1 || Math.abs(ty - y) > 0.1) ? requestAnimationFrame(loop) : 0;
+    }
+
+    card.addEventListener('pointerenter', function (e) {
+      if (e.pointerType === 'touch') return;
+      pos(e); x = tx; y = ty; apply();
+      card.classList.add('is-hover');
+    });
+    card.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch') return;
+      pos(e);
+      if (!raf) raf = requestAnimationFrame(loop);
+    });
+    card.addEventListener('pointerleave', function () {
+      card.classList.remove('is-hover');
+    });
+  });
+})();
+
+/* REVEAL (páginas de produto, body.pp): títulos, cards e blocos surgem com fade + subida quando entram na tela,
+   em sequência dentro de cada grupo (efeito "cascata"), e uma barra fina no topo mostra o progresso da rolagem.
+   Roda mesmo com "reduzir movimento" ligado (é guiado pela rolagem do usuário). Sem JS, tudo aparece normal. */
+(function () {
+  if (!document.body.classList.contains('pp')) return;
+
+  var sel = [
+    '.pp-sec .blog-eyebrow', '.pp-sec .pp-h2', '.pp-sec .pp-sub', '.pp-sec .pp-note', '.pp-sec .md-item',
+    '.pp-sec .pp-card', '.pp-sec .pp-plan', '.pp-sec .pp-shot', '.pp-sec .pp-proof', '.pp-sec .tl-lead', '.pp-sec .pp-callout', '.pp-sec .pp-stat', '.pp-sec .md-tabs', '.pp-sec .erp-step', '.pp-sec .pp-list li', '.pp-sec .post-cta',
+    '.ph-copy > *', '.ph-orbits'
+  ].join(',');
+  var els = Array.prototype.slice.call(document.querySelectorAll(sel));
+
+  // atraso em cascata: posição do item entre os irmãos de mesmo tipo (até 6 passos de 80 ms)
+  els.forEach(function (el) {
+    var sibs = Array.prototype.filter.call(el.parentNode.children, function (s) { return s.classList[0] === el.classList[0]; });
+    var i = Math.min(sibs.indexOf(el), 6);
+    el.style.setProperty('--d', (i * 0.08).toFixed(2) + 's');
+    el.classList.add('rv');
+  });
+
+  function show(el) {
+    el.classList.add('in');
+    var delay = parseFloat(el.style.getPropertyValue('--d')) || 0;
+    // depois de revelado, volta a transição curta pra o zoom do hover responder rápido
+    setTimeout(function () { el.classList.add('rv-done'); }, (0.7 + delay) * 1000 + 60);
+  }
+
+  if (!('IntersectionObserver' in window)) { els.forEach(show); }
+  else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    els.forEach(function (el) { io.observe(el); });
+  }
+
+  // barra de progresso da página
+  var bar = document.createElement('div');
+  bar.className = 'pp-progress';
+  bar.innerHTML = '<i></i>';
+  document.body.appendChild(bar);
+  var fill = bar.firstChild, ticking = false;
+  function draw() {
+    ticking = false;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? Math.min(1, Math.max(0, window.scrollY / h)) : 0;
+    fill.style.transform = 'scaleX(' + p + ')';
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }, { passive: true });
+  window.addEventListener('resize', draw);
+  draw();
+})();
+
+/* MENU "SOLUÇÕES" COM LISTA DE PRODUTOS (".nav-dd"): clicar na seta/palavra abre e fecha a lista; clicar fora,
+   escolher um item ou apertar Esc fecha. */
+(function () {
+  var dds = document.querySelectorAll('.nav-dd');
+  if (!dds.length) return;
+  dds.forEach(function (dd) {
+    var btn = dd.querySelector('.nav-dd-btn');
+    function set(open) {
+      dd.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      set(!dd.classList.contains('open'));
+    });
+    document.addEventListener('click', function (e) { if (!dd.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+    dd.querySelectorAll('.nav-menu a').forEach(function (a) {
+      a.addEventListener('click', function () { set(false); });
+    });
+  });
 })();
