@@ -49,6 +49,8 @@ jobs:
             --include 'style.css' \
             --include 'blog/*' \
             --include 'post/*' \
+            --include 'privacy-policy/*' \
+            --include 'terms-and-conditions/*' \
             --include 'flow/*' \
             --include 'flow-1/*' \
             --include 'fab/*' \
