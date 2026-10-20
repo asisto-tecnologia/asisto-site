@@ -801,3 +801,21 @@ document.querySelectorAll('.faqlist details').forEach(function(d){
     });
   });
 })();
+
+/* MENU NO CELULAR: o botão hambúrguer (".nav-toggle") abre/fecha a lista de links do cabeçalho; clicar fora,
+   escolher um link ou apertar Esc fecha. No desktop o botão fica escondido (ver CSS). */
+(function () {
+  var top = document.querySelector('.top');
+  var btn = document.querySelector('.nav-toggle');
+  if (!top || !btn) return;
+  function set(open) {
+    top.classList.toggle('menu-open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  }
+  btn.addEventListener('click', function () { set(!top.classList.contains('menu-open')); });
+  document.addEventListener('click', function (e) { if (!top.contains(e.target)) set(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+  top.querySelectorAll('.nav a:not(.nav-dd-btn)').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
+  window.addEventListener('resize', function () { if (window.innerWidth > 900) set(false); });
+})();
