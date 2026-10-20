@@ -49,6 +49,9 @@ jobs:
             --include 'style.css' \
             --include 'blog/*' \
             --include 'post/*' \
+            --include 'flow/*' \
+            --include 'flow-1/*' \
+            --include 'fab/*' \
             --include 'produtos/*' \
             --include '404.html' \
             --include 'robots.txt' \
