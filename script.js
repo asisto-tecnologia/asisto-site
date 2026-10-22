@@ -417,49 +417,66 @@
   io.observe(grid);
 })();
 
-// Time (desktop/tablet): carrossel de cards — setas, fade nas pontas só quando há mais pra rolar,
-// arrastar com o mouse e, em tela de toque, toque no card abre a bio (no desktop é hover, via CSS).
+// Time (desktop/tablet): carrossel automático e contínuo. Os cards andam sozinhos em loop (cópias
+// aria-hidden dos 6 cards emendam o fim no começo); pausa no hover (pra ler a bio), no arraste, na
+// rolagem manual e fora da tela. Mouse arrasta; em tela de toque, toque abre a bio. Com "reduzir
+// movimento" não anda sozinho. Até 700px vale o carrossel do celular (snap + pontos), sem cópias.
 (function () {
   var grid = document.querySelector('.teamgrid');
   if (!grid) return;
-  var bar = document.createElement('div');
-  bar.className = 'team-arrows';
-  var icons = {
-    prev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>',
-    next: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>'
-  };
-  function arrow(dir, label) {
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'team-arrow';
-    b.setAttribute('aria-label', label);
-    b.innerHTML = icons[dir];
-    bar.appendChild(b);
-    return b;
-  }
-  var prev = arrow('prev', 'Pessoa anterior'), next = arrow('next', 'Próxima pessoa');
-  grid.parentNode.insertBefore(bar, grid.nextSibling);
+  var desk = window.matchMedia('(min-width: 701px)');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var SPEED = 28; // px por segundo
+  var people = [], clones = [];
+  var hover = false, visible = true, resumeAt = 0, pos = 0, last = 0, raf = 0;
 
-  function step() {
-    var p = grid.querySelector('.person');
-    return p.offsetWidth + (parseFloat(getComputedStyle(grid).columnGap) || 20);
+  function build() {
+    if (clones.length || !desk.matches || reduce) return;
+    people = Array.prototype.slice.call(grid.querySelectorAll('.person'));
+    clones = people.map(function (p) {
+      var c = p.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      c.classList.add('clone');
+      grid.appendChild(c);
+      return c;
+    });
+    pos = grid.scrollLeft;
   }
-  prev.addEventListener('click', function () { grid.scrollBy({ left: -step(), behavior: 'smooth' }); });
-  next.addEventListener('click', function () { grid.scrollBy({ left: step(), behavior: 'smooth' }); });
-
-  function update() {
-    var max = grid.scrollWidth - grid.clientWidth, x = grid.scrollLeft;
-    grid.style.setProperty('--fl', x > 4 ? '64px' : '0px');
-    grid.style.setProperty('--fr', x < max - 4 ? '64px' : '0px');
-    prev.disabled = x <= 4;
-    next.disabled = x >= max - 4;
-    bar.hidden = max <= 4;
+  function destroy() {
+    clones.forEach(function (c) { c.parentNode && c.parentNode.removeChild(c); });
+    clones = [];
   }
-  grid.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
-  update();
+  function sync() {
+    if (desk.matches) { build(); start(); }
+    else { destroy(); stop(); }
+  }
+  function nudge(ms) { resumeAt = performance.now() + (ms || 1800); }
 
-  // arrastar com o mouse (o snap volta quando solta)
+  function tick(t) {
+    raf = requestAnimationFrame(tick);
+    var dt = last ? Math.min(t - last, 64) / 1000 : 0;
+    last = t;
+    if (!clones.length) return;
+    // alguém (roda, trackpad, arraste) mexeu na rolagem: assume a posição nova
+    if (Math.abs(grid.scrollLeft - pos) > 1.5) pos = grid.scrollLeft;
+    var half = clones[0].offsetLeft - people[0].offsetLeft;
+    if (!hover && visible && t >= resumeAt && !document.hidden) pos += SPEED * dt;
+    if (half > 0) {
+      if (pos >= half) pos -= half;
+      else if (pos < 0) pos += half;
+    }
+    grid.scrollLeft = pos;
+  }
+  function start() { if (!raf && clones.length) { last = 0; raf = requestAnimationFrame(tick); } }
+  function stop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+
+  grid.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hover = true; });
+  grid.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { hover = false; nudge(600); } });
+  grid.addEventListener('wheel', function () { nudge(); }, { passive: true });
+  grid.addEventListener('touchstart', function () { nudge(3000); }, { passive: true });
+  grid.addEventListener('touchend', function () { nudge(); }, { passive: true });
+
+  // arrastar com o mouse
   var down = false, moved = false, sx = 0, sl = 0;
   grid.addEventListener('pointerdown', function (e) {
     if (e.pointerType !== 'mouse' || e.button !== 0) return;
@@ -469,7 +486,7 @@
     if (!down) return;
     var dx = e.clientX - sx;
     if (!moved && Math.abs(dx) > 5) { moved = true; grid.classList.add('drag'); }
-    if (moved) grid.scrollLeft = sl - dx;
+    if (moved) { grid.scrollLeft = sl - dx; pos = grid.scrollLeft; }
   });
   window.addEventListener('pointerup', function () {
     if (!down) return;
@@ -484,9 +501,16 @@
       if (!p) return;
       var open = p.classList.contains('open');
       Array.prototype.forEach.call(grid.querySelectorAll('.person.open'), function (o) { o.classList.remove('open'); });
-      if (!open) p.classList.add('open');
+      if (!open) { p.classList.add('open'); nudge(6000); }
     });
   }
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }, { threshold: 0.1 }).observe(grid);
+  }
+  if (desk.addEventListener) desk.addEventListener('change', sync); else desk.addListener(sync);
+  // depois dos outros scripts da seção (pontos do celular) terem lido os 6 cards originais
+  setTimeout(sync, 0);
 })();
 
 // CTA: texto e botões entram com fade+slide escalonado quando o card aparece na tela.
