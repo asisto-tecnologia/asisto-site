@@ -417,6 +417,102 @@
   io.observe(grid);
 })();
 
+// Time (desktop/tablet): carrossel automático e contínuo. Os cards andam sozinhos em loop (cópias
+// aria-hidden dos 6 cards emendam o fim no começo); pausa no hover (pra ler a bio), no arraste, na
+// rolagem manual e fora da tela. Mouse arrasta; em tela de toque, toque abre a bio. Com "reduzir
+// movimento" não anda sozinho. Até 700px vale o carrossel do celular (snap + pontos), sem cópias.
+(function () {
+  var grid = document.querySelector('.teamgrid');
+  if (!grid) return;
+  var desk = window.matchMedia('(min-width: 701px)');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var SPEED = 55; // px por segundo
+  var people = [], clones = [];
+  var hover = false, visible = true, resumeAt = 0, pos = 0, last = 0, raf = 0;
+
+  function build() {
+    if (clones.length || !desk.matches || reduce) return;
+    people = Array.prototype.slice.call(grid.querySelectorAll('.person'));
+    clones = people.map(function (p) {
+      var c = p.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      c.classList.add('clone');
+      grid.appendChild(c);
+      return c;
+    });
+    pos = grid.scrollLeft;
+  }
+  function destroy() {
+    clones.forEach(function (c) { c.parentNode && c.parentNode.removeChild(c); });
+    clones = [];
+  }
+  function sync() {
+    if (desk.matches) { build(); start(); }
+    else { destroy(); stop(); }
+  }
+  function nudge(ms) { resumeAt = performance.now() + (ms || 1800); }
+
+  function tick(t) {
+    raf = requestAnimationFrame(tick);
+    var dt = last ? Math.min(t - last, 64) / 1000 : 0;
+    last = t;
+    if (!clones.length) return;
+    // alguém (roda, trackpad, arraste) mexeu na rolagem: assume a posição nova
+    if (Math.abs(grid.scrollLeft - pos) > 1.5) pos = grid.scrollLeft;
+    var half = clones[0].offsetLeft - people[0].offsetLeft;
+    if (!hover && visible && t >= resumeAt && !document.hidden) pos += SPEED * dt;
+    if (half > 0) {
+      if (pos >= half) pos -= half;
+      else if (pos < 0) pos += half;
+    }
+    grid.scrollLeft = pos;
+  }
+  function start() { if (!raf && clones.length) { last = 0; raf = requestAnimationFrame(tick); } }
+  function stop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+
+  grid.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hover = true; });
+  grid.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { hover = false; nudge(600); } });
+  grid.addEventListener('wheel', function () { nudge(); }, { passive: true });
+  grid.addEventListener('touchstart', function () { nudge(3000); }, { passive: true });
+  grid.addEventListener('touchend', function () { nudge(); }, { passive: true });
+
+  // arrastar com o mouse
+  var down = false, moved = false, sx = 0, sl = 0;
+  grid.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    down = true; moved = false; sx = e.clientX; sl = grid.scrollLeft;
+  });
+  window.addEventListener('pointermove', function (e) {
+    if (!down) return;
+    var dx = e.clientX - sx;
+    if (!moved && Math.abs(dx) > 5) { moved = true; grid.classList.add('drag'); }
+    if (moved) { grid.scrollLeft = sl - dx; pos = grid.scrollLeft; }
+  });
+  window.addEventListener('pointerup', function () {
+    if (!down) return;
+    down = false;
+    grid.classList.remove('drag');
+  });
+
+  // toque: abre/fecha a bio do card (só em dispositivo sem hover)
+  if (window.matchMedia && window.matchMedia('(hover: none)').matches) {
+    grid.addEventListener('click', function (e) {
+      var p = e.target.closest ? e.target.closest('.person') : null;
+      if (!p) return;
+      var open = p.classList.contains('open');
+      Array.prototype.forEach.call(grid.querySelectorAll('.person.open'), function (o) { o.classList.remove('open'); });
+      if (!open) { p.classList.add('open'); nudge(6000); }
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }, { threshold: 0.1 }).observe(grid);
+  }
+  if (desk.addEventListener) desk.addEventListener('change', sync); else desk.addListener(sync);
+  // depois dos outros scripts da seção (pontos do celular) terem lido os 6 cards originais
+  setTimeout(sync, 0);
+})();
+
 // CTA: texto e botões entram com fade+slide escalonado quando o card aparece na tela.
 (function () {
   var card = document.getElementById('ctaCard');

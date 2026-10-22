@@ -510,7 +510,7 @@ a{color:inherit;text-decoration:none}
 .team-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
 .team-title{font-size:34px;line-height:1.25}
 .team-title .accent{color:var(--sky);font-style:italic;font-weight:300}
-.teamgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:36px;text-align:left}
+.teamgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 24px;margin-top:36px;text-align:left}
 /* entrada com fade+slide escalonado, e zoom na foto no hover — recriação em CSS/JS puro do
    componente React (TeamGrid, usa motion/react) que o usuário mandou. Ver script.js. */
 .person{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease,scale .3s ease}
@@ -519,6 +519,8 @@ a{color:inherit;text-decoration:none}
 .teamgrid.in .person:nth-of-type(2){transition-delay:.1s}
 .teamgrid.in .person:nth-of-type(3){transition-delay:.2s}
 .teamgrid.in .person:nth-of-type(4){transition-delay:.3s}
+.teamgrid.in .person:nth-of-type(5){transition-delay:.4s}
+.teamgrid.in .person:nth-of-type(6){transition-delay:.5s}
 .person:hover{scale:1.02}
 .person-photo{position:relative;overflow:hidden;border-radius:14px}
 .person-photo img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;transition:transform .3s ease}
@@ -1161,4 +1163,30 @@ a{color:inherit;text-decoration:none}
   .pp-stat{min-width:0;width:100%;padding:20px 24px}
   .pp-flexc>.pp-card{flex:0 0 100%}
   .pp-plan{padding:24px 20px}
+}
+
+/* ---- time: carrossel de cards em pé (desktop/tablet) ----
+   Foto cobre o card; nome + cargo ficam num painel de vidro embaixo e a bio abre no hover
+   (em tela de toque, no toque). No celular (<=700px) segue o carrossel com snap + pontos acima. */
+@media (min-width:701px){
+  .teamgrid{--fl:64px;--fr:64px;display:flex;gap:20px;overflow-x:auto;overflow-y:hidden;
+   scrollbar-width:none;
+   padding:14px 4px 18px;margin-top:22px;cursor:grab;
+   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%);
+   mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%)}
+  .teamgrid::-webkit-scrollbar{display:none}
+  .teamgrid.drag{cursor:grabbing;user-select:none}
+  .person{flex:0 0 272px;height:392px;position:relative;border-radius:18px;
+   overflow:hidden;background:#0b1118;border:1px solid rgba(255,255,255,.06)}
+  .person:hover{scale:1}
+  .person-photo{position:absolute;inset:0;border-radius:0}
+  .person-photo img{height:100%;aspect-ratio:auto;object-position:50% 15%;-webkit-user-drag:none;user-select:none}
+  .person-info{position:absolute;left:8px;right:8px;bottom:8px;padding:12px 14px;border-radius:14px;
+   display:flex;flex-direction:column;background:rgba(14,20,28,.58);border:1px solid rgba(255,255,255,.1);
+   -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+  .person .nm{order:1;margin:0;font-size:16px}
+  .person .role{order:2;margin:2px 0 0;font-size:10px;letter-spacing:.1em}
+  .person .bio{order:3;margin:0;font-size:12.5px;line-height:1.5;max-height:0;opacity:0;overflow:hidden;
+   transition:max-height .45s ease,opacity .3s ease,margin .3s ease}
+  .person:hover .bio,.person.open .bio{max-height:150px;opacity:1;margin-top:10px}
 }
