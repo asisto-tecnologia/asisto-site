@@ -773,22 +773,12 @@ a{color:inherit;text-decoration:none}
 }
 
 /* mobile: clientes e time viram faixas roláveis com o dedo (05/10/2026) */
-.team-dots{display:none}
 @media (max-width:700px){
   /* clientes: sem animação CSS; a rolagem automática é feita em JS (script.js) e o dedo assume quando toca */
   .client-viewport{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x pan-y}
   .client-viewport::-webkit-scrollbar{display:none}
   .client-track{animation:none}
 
-  /* time: carrossel com snap + pontos */
-  .teamgrid{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 20px;
-   margin:28px -20px 0;padding:0 20px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  .teamgrid::-webkit-scrollbar{display:none}
-  .person{flex:0 0 78%;scroll-snap-align:center}
-  .person .bio{font-size:13px}
-  .team-dots{display:flex;justify-content:center;gap:8px;margin-top:20px}
-  .team-dots button{height:8px;width:8px;border-radius:999px;border:0;padding:0;background:rgba(255,255,255,.25);transition:all .3s ease}
-  .team-dots button.on{width:28px;background:var(--azure);box-shadow:0 0 10px rgba(0,151,255,.7)}
 }
 
 /* ---- blog (05/10/2026) ---- listagem em /blog/ e artigos em /blog/<post>/ */
@@ -1165,10 +1155,10 @@ a{color:inherit;text-decoration:none}
   .pp-plan{padding:24px 20px}
 }
 
-/* ---- time: carrossel de cards em pé (desktop/tablet) ----
+/* ---- time: carrossel de cards em pé (todas as larguras) ----
    Foto cobre o card; nome + cargo ficam num painel de vidro embaixo e a bio abre no hover
    (em tela de toque, no toque). No celular (<=700px) segue o carrossel com snap + pontos acima. */
-@media (min-width:701px){
+@media all{
   .teamgrid{--fl:64px;--fr:64px;display:flex;gap:20px;overflow-x:auto;overflow-y:hidden;
    scrollbar-width:none;
    padding:14px 4px 18px;margin-top:22px;cursor:grab;
@@ -1188,5 +1178,14 @@ a{color:inherit;text-decoration:none}
   .person .role{order:2;margin:2px 0 0;font-size:10px;letter-spacing:.1em}
   .person .bio{order:3;margin:0;font-size:12.5px;line-height:1.5;max-height:0;opacity:0;overflow:hidden;
    transition:max-height .45s ease,opacity .3s ease,margin .3s ease}
-  .person:hover .bio,.person.open .bio{max-height:150px;opacity:1;margin-top:10px}
+  .person.open .bio{max-height:150px;opacity:1;margin-top:10px}
+}
+@media (hover:hover){
+  .person:hover .bio{max-height:150px;opacity:1;margin-top:10px}
+}
+@media (max-width:700px){
+  .teamgrid{--fl:24px;--fr:24px;margin:20px -20px 0;padding-inline:20px}
+  .person{flex-basis:236px;height:352px}
+  .person .nm{font-size:15px}
+  .person .bio{font-size:12px}
 }
