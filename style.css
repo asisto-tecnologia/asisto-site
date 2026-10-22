@@ -510,7 +510,7 @@ a{color:inherit;text-decoration:none}
 .team-eyebrow span{display:inline-block;padding:6px 16px;border-radius:999px;border:1px solid rgba(0,151,255,.35);background:rgba(0,151,255,.12);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sky)}
 .team-title{font-size:34px;line-height:1.25}
 .team-title .accent{color:var(--sky);font-style:italic;font-weight:300}
-.teamgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:36px;text-align:left}
+.teamgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 24px;margin-top:36px;text-align:left}
 /* entrada com fade+slide escalonado, e zoom na foto no hover — recriação em CSS/JS puro do
    componente React (TeamGrid, usa motion/react) que o usuário mandou. Ver script.js. */
 .person{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease,scale .3s ease}
@@ -519,6 +519,8 @@ a{color:inherit;text-decoration:none}
 .teamgrid.in .person:nth-of-type(2){transition-delay:.1s}
 .teamgrid.in .person:nth-of-type(3){transition-delay:.2s}
 .teamgrid.in .person:nth-of-type(4){transition-delay:.3s}
+.teamgrid.in .person:nth-of-type(5){transition-delay:.4s}
+.teamgrid.in .person:nth-of-type(6){transition-delay:.5s}
 .person:hover{scale:1.02}
 .person-photo{position:relative;overflow:hidden;border-radius:14px}
 .person-photo img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;transition:transform .3s ease}
