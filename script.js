@@ -417,6 +417,78 @@
   io.observe(grid);
 })();
 
+// Time (desktop/tablet): carrossel de cards — setas, fade nas pontas só quando há mais pra rolar,
+// arrastar com o mouse e, em tela de toque, toque no card abre a bio (no desktop é hover, via CSS).
+(function () {
+  var grid = document.querySelector('.teamgrid');
+  if (!grid) return;
+  var bar = document.createElement('div');
+  bar.className = 'team-arrows';
+  var icons = {
+    prev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>',
+    next: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>'
+  };
+  function arrow(dir, label) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'team-arrow';
+    b.setAttribute('aria-label', label);
+    b.innerHTML = icons[dir];
+    bar.appendChild(b);
+    return b;
+  }
+  var prev = arrow('prev', 'Pessoa anterior'), next = arrow('next', 'Próxima pessoa');
+  grid.parentNode.insertBefore(bar, grid.nextSibling);
+
+  function step() {
+    var p = grid.querySelector('.person');
+    return p.offsetWidth + (parseFloat(getComputedStyle(grid).columnGap) || 20);
+  }
+  prev.addEventListener('click', function () { grid.scrollBy({ left: -step(), behavior: 'smooth' }); });
+  next.addEventListener('click', function () { grid.scrollBy({ left: step(), behavior: 'smooth' }); });
+
+  function update() {
+    var max = grid.scrollWidth - grid.clientWidth, x = grid.scrollLeft;
+    grid.style.setProperty('--fl', x > 4 ? '64px' : '0px');
+    grid.style.setProperty('--fr', x < max - 4 ? '64px' : '0px');
+    prev.disabled = x <= 4;
+    next.disabled = x >= max - 4;
+    bar.hidden = max <= 4;
+  }
+  grid.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+
+  // arrastar com o mouse (o snap volta quando solta)
+  var down = false, moved = false, sx = 0, sl = 0;
+  grid.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    down = true; moved = false; sx = e.clientX; sl = grid.scrollLeft;
+  });
+  window.addEventListener('pointermove', function (e) {
+    if (!down) return;
+    var dx = e.clientX - sx;
+    if (!moved && Math.abs(dx) > 5) { moved = true; grid.classList.add('drag'); }
+    if (moved) grid.scrollLeft = sl - dx;
+  });
+  window.addEventListener('pointerup', function () {
+    if (!down) return;
+    down = false;
+    grid.classList.remove('drag');
+  });
+
+  // toque: abre/fecha a bio do card (só em dispositivo sem hover)
+  if (window.matchMedia && window.matchMedia('(hover: none)').matches) {
+    grid.addEventListener('click', function (e) {
+      var p = e.target.closest ? e.target.closest('.person') : null;
+      if (!p) return;
+      var open = p.classList.contains('open');
+      Array.prototype.forEach.call(grid.querySelectorAll('.person.open'), function (o) { o.classList.remove('open'); });
+      if (!open) p.classList.add('open');
+    });
+  }
+})();
+
 // CTA: texto e botões entram com fade+slide escalonado quando o card aparece na tela.
 (function () {
   var card = document.getElementById('ctaCard');
