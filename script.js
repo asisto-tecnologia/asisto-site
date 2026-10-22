@@ -426,7 +426,7 @@
   if (!grid) return;
   var desk = window.matchMedia('(min-width: 701px)');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var SPEED = 28; // px por segundo
+  var SPEED = 55; // px por segundo
   var people = [], clones = [];
   var hover = false, visible = true, resumeAt = 0, pos = 0, last = 0, raf = 0;
 
