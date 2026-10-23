@@ -877,3 +877,54 @@ document.querySelectorAll('.faqlist details').forEach(function(d){
   top.querySelectorAll('.nav a:not(.nav-dd-btn)').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
   window.addEventListener('resize', function () { if (window.innerWidth > 900) set(false); });
 })();
+
+// Rodapé: mapa único (Leaflet + OpenStreetMap) com os 4 endereços marcados. Os cards sobre o mapa
+// aproximam o ponto escolhido; clicar no pino também seleciona; clicar no card ativo volta à visão geral.
+(function () {
+  var box = document.getElementById('footMap');
+  var canvas = document.getElementById('footMapCanvas');
+  if (!box || !canvas || !window.L) return;
+  var cards = Array.prototype.slice.call(box.querySelectorAll('.foot-map-card'));
+  var open = document.getElementById('footMapOpen');
+  var touch = L.Browser.mobile;
+  var map = L.map(canvas, { scrollWheelZoom: false, dragging: !touch, tap: false, zoomSnap: 0.5, attributionControl: true });
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+  }).addTo(map);
+
+  var pts = cards.map(function (c) { return L.latLng(parseFloat(c.getAttribute('data-lat')), parseFloat(c.getAttribute('data-lng'))); });
+  var pins = pts.map(function (ll, i) {
+    var m = L.marker(ll, { icon: L.divIcon({ className: 'fm-pin', html: '<i></i>', iconSize: [22, 22], iconAnchor: [11, 11] }), keyboard: false }).addTo(map);
+    m.on('click', function () { select(i); });
+    return m;
+  });
+  var bounds = L.latLngBounds(pts);
+  var active = -1;
+
+  function overview(animate) {
+    var pad = box.offsetWidth < 700 ? { paddingTopLeft: [24, 24], paddingBottomRight: [24, 24] } : { paddingTopLeft: [50, 40], paddingBottomRight: [50, 130] };
+    if (animate) map.flyToBounds(bounds, Object.assign({ duration: 0.9 }, pad)); else map.fitBounds(bounds, pad);
+  }
+  function select(i) {
+    var again = i === active;
+    active = again ? -1 : i;
+    cards.forEach(function (c, n) {
+      var on = n === active;
+      c.classList.toggle('on', on);
+      c.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (pins[n]._icon) pins[n]._icon.classList.toggle('on', on);
+    });
+    if (again) { open.hidden = true; overview(true); return; }
+    var z = 15, off = box.offsetWidth < 700 ? 0 : 60;
+    var target = map.unproject(map.project(pts[i], z).add([0, off]), z);
+    map.flyTo(target, z, { duration: 0.9 });
+    open.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(cards[i].getAttribute('data-q'));
+    open.hidden = false;
+  }
+  cards.forEach(function (c, i) { c.addEventListener('click', function () { select(i); }); });
+  map.on('click', function () { map.scrollWheelZoom.enable(); });
+  box.addEventListener('mouseleave', function () { map.scrollWheelZoom.disable(); });
+
+  overview(false);
+  window.addEventListener('resize', function () { map.invalidateSize(); if (active < 0) overview(false); });
+})();
