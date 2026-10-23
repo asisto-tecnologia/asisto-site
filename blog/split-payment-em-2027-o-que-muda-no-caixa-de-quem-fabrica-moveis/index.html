@@ -18,7 +18,8 @@
 <meta property="og:description" content="A reforma tributária muda como o imposto é recolhido. A partir de 2027, o tributo sai da transação no momento do pagamento. Para a fábrica que vende a prazo e produz com ciclo longo, o impacto no capital de giro é concreto.">
 <meta property="og:image" content="https://www.asisto.com.br/imagens/blog/split-payment-em-2027-o-que-muda-no-caixa-de-quem-fabrica-moveis.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../../style.css?v=143">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="../../style.css?v=146">
 </head>
 <body>
 
@@ -96,23 +97,28 @@
       </div>
     </div>
 
-    <div class="foot-locs">
-      <div class="foot-loc">
-        <p class="foot-loc-title">Guarulhos - SP</p>
-        <p class="foot-loc-addr">R. Silvestre Vasconcelos Calmon, 51 - Guarulhos</p>
-        <iframe src="https://maps.google.com/maps?q=R.+Silvestre+Vasconcelos+Calmon,+51,+Guarulhos,+SP&amp;z=16&amp;output=embed" title="Mapa Guarulhos" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
-      <div class="foot-loc">
-        <p class="foot-loc-title">São Bernardo do Campo - SP</p>
-        <p class="foot-loc-addr">R. Borba Gato, 51 - São Bernardo do Campo</p>
-        <iframe src="https://maps.google.com/maps?q=R.+Borba+Gato,+51,+S%C3%A3o+Bernardo+do+Campo,+SP&amp;z=16&amp;output=embed" title="Mapa São Bernardo do Campo" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
-      <div class="foot-loc">
-        <p class="foot-loc-title">Sombrio - SC</p>
-        <p class="foot-loc-addr">R. Breno Cardoso, 349 - Sombrio</p>
-        <iframe src="https://maps.google.com/maps?q=R.+Breno+Cardoso,+349,+Sombrio,+SC&amp;z=16&amp;output=embed" title="Mapa Sombrio" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
-    </div>
+    <div class="foot-map" id="footMap">
+          <div class="foot-map-frame" id="footMapCanvas" role="img" aria-label="Mapa com os endereços da Asisto"></div>
+          <a class="foot-map-open" id="footMapOpen" href="#" target="_blank" rel="noopener" hidden>Abrir no Maps</a>
+          <div class="foot-map-cards">
+            <button type="button" class="foot-map-card" data-lat="-23.47346" data-lng="-46.53398" data-q="R. Silvestre Vasconcelos Calmon, 51, Guarulhos, SP" aria-pressed="false">
+              <span class="fm-title">Guarulhos - SP</span>
+              <span class="fm-addr">R. Silvestre Vasconcelos Calmon, 51 - Guarulhos</span>
+            </button>
+            <button type="button" class="foot-map-card" data-lat="-23.68466" data-lng="-46.57377" data-q="R. Borba Gato, 51, São Bernardo do Campo, SP" aria-pressed="false">
+              <span class="fm-title">São Bernardo do Campo - SP</span>
+              <span class="fm-addr">R. Borba Gato, 51 - São Bernardo do Campo</span>
+            </button>
+            <button type="button" class="foot-map-card" data-lat="-29.10871" data-lng="-49.62450" data-q="R. Breno Cardoso, 349, Sombrio, SC" aria-pressed="false">
+              <span class="fm-title">Sombrio - SC</span>
+              <span class="fm-addr">R. Breno Cardoso, 349 - Sombrio</span>
+            </button>
+            <button type="button" class="foot-map-card" data-lat="-30.02773" data-lng="-51.18125" data-q="Av. Carlos Gomes, 700, Porto Alegre, RS" aria-pressed="false">
+              <span class="fm-title">Porto Alegre - RS</span>
+              <span class="fm-addr">Av. Carlos Gomes, 700 - Boa Vista, Porto Alegre</span>
+            </button>
+          </div>
+        </div>
 
     <div class="foot-bottom">
       <p>Asisto - CNPJ 30.992.709/0001-81 © Todos os direitos reservados 2026.</p>
@@ -125,6 +131,7 @@
 </footer>
 
 <a class="wa-float" href="https://api.whatsapp.com/send/?phone=5511994359978&amp;text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Asisto%20e%20gostaria%20de%20saber%20mais." target="_blank" rel="noopener" aria-label="Falar com a Asisto no WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.04 3C9.4 3 4 8.4 4 15.04c0 2.12.55 4.19 1.6 6.01L4 29l8.1-1.56a12 12 0 0 0 3.94.66h.01C22.7 28.1 28 22.7 28 16.06 28 9.4 22.68 3 16.04 3zm0 22.02a10 10 0 0 1-3.4-.6l-.5-.18-4.8.93.95-4.68-.2-.5a9.96 9.96 0 0 1-1.54-5.35c0-5.5 4.5-10 10.02-10 5.5 0 9.96 4.46 9.96 9.98 0 5.5-4.5 9.4-10.5 10.4zm5.5-7.5c-.3-.15-1.78-.88-2.05-.98-.28-.1-.48-.15-.68.15-.2.3-.78.98-.95 1.18-.18.2-.35.22-.65.08-.3-.15-1.27-.47-2.4-1.5-.9-.8-1.5-1.78-1.67-2.08-.18-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.52-.08-.15-.68-1.65-.93-2.25-.25-.6-.5-.5-.68-.5h-.58c-.2 0-.52.08-.8.38-.27.3-1.04 1.02-1.04 2.5s1.07 2.9 1.22 3.1c.15.2 2.1 3.2 5.1 4.5.7.3 1.27.5 1.7.62.72.23 1.37.2 1.88.12.58-.08 1.78-.73 2.03-1.43.25-.7.25-1.3.18-1.43-.08-.13-.28-.2-.58-.35z"/></svg></a>
-<script src="../../script.js?v=27"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="../../script.js?v=33"></script>
 </body>
 </html>
