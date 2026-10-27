@@ -928,3 +928,48 @@ document.querySelectorAll('.faqlist details').forEach(function(d){
   overview(false);
   window.addEventListener('resize', function () { map.invalidateSize(); if (active < 0) overview(false); });
 })();
+
+// Educação: Glass Folder Cards — recriação em JS puro do componente React (GlassFolder) que o usuário
+// mandou. Abre/fecha no clique, paralaxe no ponteiro, entrada ao rolar; a arte do fundo vem do CSS.
+(function () {
+  var roots = document.querySelectorAll('.gf-root');
+  if (!roots.length) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function setOpen(r, on) {
+    r.toggleAttribute('data-open', on);
+    var hit = r.querySelector('.gf-hit');
+    if (hit) hit.setAttribute('aria-expanded', on ? 'true' : 'false');
+    var f = r.querySelector('.gf-files');
+    if (f) f.toggleAttribute('inert', !on);
+  }
+  roots.forEach(function (r, i) {
+    r.querySelector('.gf-hit').addEventListener('click', function () { setOpen(r, !r.hasAttribute('data-open')); });
+    if (reduce) return;
+    var raf = 0, px = 0, py = 0;
+    var write = function () { raf = 0; r.style.setProperty('--gf-px', px.toFixed(3)); r.style.setProperty('--gf-py', py.toFixed(3)); };
+    r.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch') return;
+      var b = r.getBoundingClientRect();
+      px = ((e.clientX - b.left) / b.width) * 2 - 1;
+      py = ((e.clientY - b.top) / b.height) * 2 - 1;
+      if (!raf) raf = requestAnimationFrame(write);
+    });
+    r.addEventListener('pointerleave', function () { px = 0; py = 0; if (!raf) raf = requestAnimationFrame(write); });
+    if ('IntersectionObserver' in window) {
+      r.classList.add('gf-pre');
+      var io = new IntersectionObserver(function (en) {
+        if (!en.some(function (e) { return e.isIntersecting; })) return;
+        io.disconnect();
+        setTimeout(function () { r.classList.remove('gf-pre'); }, i * 140);
+      }, { threshold: 0.25 });
+      io.observe(r);
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    roots.forEach(function (r) { if (r.hasAttribute('data-open')) setOpen(r, false); });
+  });
+  document.addEventListener('pointerdown', function (e) {
+    roots.forEach(function (r) { if (r.hasAttribute('data-open') && !r.contains(e.target)) setOpen(r, false); });
+  });
+})();
